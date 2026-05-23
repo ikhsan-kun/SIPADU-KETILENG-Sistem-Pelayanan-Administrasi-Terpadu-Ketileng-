@@ -1,0 +1,270 @@
+@extends('layouts.admin')
+@section('title', 'Data Penduduk')
+
+@section('content')
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-900">Data Penduduk</h1>
+        <p class="text-slate-500 text-sm mt-1">Kelola data master penduduk Desa Ketileng.</p>
+    </div>
+    <div class="flex items-center gap-2">
+        {{-- Tombol Import Excel --}}
+        <button onclick="document.getElementById('importModal').classList.remove('hidden')"
+                class="btn-outline text-sm py-2 px-4">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+            </svg>
+            Import Excel
+        </button>
+        {{-- Tombol Tambah Data --}}
+        <a href="{{ route('admin.penduduk.create') }}" class="btn-primary text-sm py-2 px-4">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Tambah Data
+        </a>
+    </div>
+</div>
+
+{{-- Alert Success --}}
+@if(session('success'))
+<div class="alert-success mb-4 flex items-center gap-2">
+    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+    </svg>
+    {{ session('success') }}
+</div>
+@endif
+
+{{-- Alert Error --}}
+@if(session('error'))
+<div class="alert-error mb-4 flex items-center gap-2">
+    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+    </svg>
+    {{ session('error') }}
+</div>
+@endif
+
+@if($errors->has('file'))
+<div class="alert-error mb-4 flex items-center gap-2">
+    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+    </svg>
+    {{ $errors->first('file') }}
+</div>
+@endif
+
+<div class="card p-0 overflow-hidden">
+    <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <form method="GET" action="{{ route('admin.penduduk.index') }}" class="relative w-72">
+            <input type="text" name="search" value="{{ $search }}" placeholder="Cari NIK, Nama, Dusun..." class="form-input pl-9 py-2 text-sm">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            @if($search)
+                <a href="{{ route('admin.penduduk.index') }}" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></a>
+            @endif
+        </form>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>NIK</th>
+                    <th>Nama Lengkap</th>
+                    <th>L/P</th>
+                    <th>Usia</th>
+                    <th>Desa / Kecamatan</th>
+                    <th class="text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($penduduk as $p)
+                <tr>
+                    <td class="font-medium text-slate-800">{{ $p->nik }}</td>
+                    <td class="font-semibold text-slate-800">{{ $p->nama }}</td>
+                    <td class="text-slate-600">{{ substr($p->jenis_kelamin, 0, 1) }}</td>
+                    <td class="text-slate-600">{{ $p->umur }} thn</td>
+                    <td class="text-slate-600">{{ $p->desa }}, Kec. {{ $p->kecamatan }} (RT {{ $p->rt ?? '-' }}/RW {{ $p->rw ?? '-' }})</td>
+                    <td>
+                        <div class="flex items-center justify-center gap-2">
+                            <a href="{{ route('admin.penduduk.edit', $p) }}" class="p-1.5 text-slate-400 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            </a>
+                            <form action="{{ route('admin.penduduk.destroy', $p) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus data penduduk ini?');">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600 bg-slate-100 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="text-center py-12 text-slate-500">
+                        Tidak ada data penduduk yang ditemukan.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div class="p-4 border-t border-slate-100">
+        {{ $penduduk->links() }}
+    </div>
+</div>
+
+{{-- ══════════════════════════════════════════════════════════════════════════ --}}
+{{-- MODAL IMPORT EXCEL                                                       --}}
+{{-- ══════════════════════════════════════════════════════════════════════════ --}}
+<div id="importModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    {{-- Backdrop --}}
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+         onclick="document.getElementById('importModal').classList.add('hidden')"></div>
+
+    {{-- Modal Content --}}
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-modal">
+        {{-- Header --}}
+        <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-lg">Import Data Penduduk</h3>
+                        <p class="text-emerald-100 text-xs">Upload file Excel (.xlsx / .xls)</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('importModal').classList.add('hidden')"
+                        class="text-white/70 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        {{-- Body --}}
+        <form action="{{ route('admin.penduduk.import') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+            @csrf
+
+            {{-- Info Box --}}
+            <div class="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex gap-3">
+                <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="text-blue-700 text-xs leading-relaxed">
+                    <p class="font-semibold mb-1">Petunjuk Import:</p>
+                    <ul class="list-disc list-inside space-y-0.5">
+                        <li>Download template terlebih dahulu agar format kolom sesuai</li>
+                        <li>Baris pertama (header) <b>tidak boleh</b> diubah</li>
+                        <li>NIK yang sudah ada akan otomatis dilewati</li>
+                        <li>Maksimal ukuran file: <b>5MB</b></li>
+                    </ul>
+                </div>
+            </div>
+
+            {{-- Download Template --}}
+            <a href="{{ route('admin.penduduk.template') }}"
+               class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-colors group">
+                <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-200 transition-colors">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-slate-700 group-hover:text-emerald-700 transition-colors">Download Template Excel</p>
+                    <p class="text-xs text-slate-400">template_import_penduduk.xlsx</p>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+            </a>
+
+            {{-- Upload Area --}}
+            <div>
+                <label class="form-label">Pilih File Excel</label>
+                <div class="relative">
+                    <input type="file" name="file" id="importFile" accept=".xlsx,.xls"
+                           class="hidden" onchange="updateFileName(this)" required>
+                    <label for="importFile"
+                           class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/50 transition-all duration-200"
+                           id="dropZone">
+                        <div class="flex flex-col items-center" id="uploadPlaceholder">
+                            <svg class="w-8 h-8 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            <p class="text-sm text-slate-500 font-medium">Klik untuk pilih file</p>
+                            <p class="text-xs text-slate-400 mt-1">Format: .xlsx atau .xls (maks. 5MB)</p>
+                        </div>
+                        <div class="flex items-center gap-3 hidden" id="fileSelected">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-700" id="selectedFileName">-</p>
+                                <p class="text-xs text-slate-400" id="selectedFileSize">-</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            {{-- Action Buttons --}}
+            <div class="flex items-center gap-3 pt-2">
+                <button type="button"
+                        onclick="document.getElementById('importModal').classList.add('hidden')"
+                        class="flex-1 py-2.5 px-4 border border-slate-300 text-slate-600 rounded-xl font-semibold text-sm hover:bg-slate-50 transition-colors">
+                    Batal
+                </button>
+                <button type="submit"
+                        class="flex-1 py-2.5 px-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                    Import Data
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-modal {
+        animation: modalIn 0.2s ease-out;
+    }
+</style>
+
+<script>
+function updateFileName(input) {
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const selected = document.getElementById('fileSelected');
+    const nameEl = document.getElementById('selectedFileName');
+    const sizeEl = document.getElementById('selectedFileSize');
+
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        nameEl.textContent = file.name;
+        sizeEl.textContent = (file.size / 1024).toFixed(1) + ' KB';
+        placeholder.classList.add('hidden');
+        selected.classList.remove('hidden');
+    } else {
+        placeholder.classList.remove('hidden');
+        selected.classList.add('hidden');
+    }
+}
+
+// Auto-open modal if there was a file error
+@if($errors->has('file'))
+    document.getElementById('importModal').classList.remove('hidden');
+@endif
+</script>
+@endsection
