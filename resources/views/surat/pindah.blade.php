@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Surat Keterangan Usaha (SKU)</title>
+    <title>Surat Keterangan Pindah</title>
     <style>
         body { font-family: 'Times New Roman', Times, serif; font-size: 10.5pt; line-height: 1.25; margin: 0.8cm 2cm; }
         .text-center { text-align: center; }
@@ -36,7 +36,6 @@
         <table style="width: 100%; border: none; margin-bottom: 5px;">
             <tr>
                 <td style="width: 15%; text-align: center; vertical-align: middle;">
-                    <!-- Silakan ganti src dengan path logo Kabupaten Tegal yang sesuai -->
                     <img src="{{ public_path('logo.png') }}" style="width: 85px; height: auto;" alt="Logo">
                 </td>
                 <td style="width: 85%; text-align: center; vertical-align: middle; line-height: 1.1;">
@@ -52,7 +51,7 @@
     </div>
 
     <div class="title-section text-center">
-        <h4 class="uppercase underline font-bold">SURAT KETERANGAN USAHA</h4>
+        <h4 class="uppercase underline font-bold">SURAT KETERANGAN PINDAH</h4>
         <p>NOMOR : {{ $pengajuan->no_surat }}</p>
     </div>
 
@@ -65,17 +64,16 @@
             <tr><td>Tempat, Tgl Lahir</td><td>:</td><td>{{ $penduduk->tempat_lahir }}, {{ $penduduk->tanggal_lahir->format('d-m-Y') }}</td></tr>
             <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $penduduk->jenis_kelamin }}</td></tr>
             <tr><td>Kewarganegaraan</td><td>:</td><td>{{ $penduduk->kewarganegaraan ?? 'WNI' }}</td></tr>
-            <tr><td>Pekerjaan</td><td>:</td><td>{{ $penduduk->pekerjaan }}</td></tr>
-            <tr><td>Alamat</td><td>:</td><td>{{ $penduduk->alamat_lengkap }}</td></tr>
+            <tr><td>Alamat Asal</td><td>:</td><td>{{ $penduduk->alamat_lengkap }}</td></tr>
         </table>
 
-        <p>Berdasarkan pengamatan kami, bahwa nama tersebut di atas benar-benar penduduk Desa Ketileng dan yang bersangkutan memiliki / menjalankan usaha:</p>
+        <p>Warga bersangkutan mengajukan permohonan pindah domisili dari Desa Ketileng menuju alamat tujuan baru:</p>
         
-        <p class="text-center font-bold" style="font-size: 14pt; margin: 15px 0;">"{{ $pengajuan->keperluan }}"</p>
+        <p class="text-center font-bold">"{{ $pengajuan->keperluan }}"</p>
+
+        <p>Semua berkas persyaratan administrasi perpindahan kependudukan telah diserahkan dan diverifikasi secara lengkap oleh perangkat desa.</p>
         
-        <p>Yang beralamat di Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal.</p>
-        
-        <p>Demikian Surat Keterangan Usaha (SKU) ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
+        <p>Demikian surat keterangan pindah ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>
     </div>
 
     <div class="signature-section">

@@ -23,12 +23,12 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
     </div>
-    <div class="card flex items-center justify-between border-emerald-100 bg-emerald-50/30">
+    <div class="card flex items-center justify-between border-blue-100 bg-blue-50/30">
         <div>
             <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Disetujui Hari Ini</p>
-            <p class="text-4xl font-bold text-emerald-600">{{ $stats['disetujui'] }}</p>
+            <p class="text-4xl font-bold text-blue-600">{{ $stats['disetujui'] }}</p>
         </div>
-        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
+        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
     </div>

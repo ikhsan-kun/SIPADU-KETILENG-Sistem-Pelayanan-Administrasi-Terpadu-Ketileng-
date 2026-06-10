@@ -97,6 +97,7 @@ class DashboardController extends Controller
      */
     public function profile()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         
         // Rekap statistics Kades
@@ -113,6 +114,7 @@ class DashboardController extends Controller
      */
     public function updateProfile(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $request->validate([

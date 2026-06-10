@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Surat Izin Hajatan</title>
+    <title>Surat Izin Khajatan</title>
     <style>
         body { font-family: 'Times New Roman', Times, serif; font-size: 10.5pt; line-height: 1.25; margin: 0.8cm 2cm; }
         .text-center { text-align: center; }
@@ -66,24 +66,25 @@
     </div>
 
     <div class="title-section text-center">
-        <h4 class="uppercase underline font-bold">SURAT IZIN HAJATAN</h4>
+        <h4 class="uppercase underline font-bold">SURAT IZIN KHAJATAN</h4>
         <p>NOMOR : {{ $pengajuan->no_surat }}</p>
     </div>
 
     <div class="content">
-        <p>Yang bertanda tangan di bawah ini Kepala Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal, memberikan <strong>IZIN HAJATAN</strong> kepada:</p>
+        <p>Yang bertanda tangan di bawah ini Kepala Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal, memberikan <strong>IZIN KHAJATAN</strong> kepada:</p>
         
         <table style="margin-left: 15px;">
             <tr><td class="w-30">Nama Lengkap</td><td class="w-2">:</td><td><strong>{{ $penduduk->nama }}</strong></td></tr>
             <tr><td>Umur</td><td>:</td><td>{{ $penduduk->umur }} Tahun</td></tr>
+            <tr><td>Kewarganegaraan</td><td>:</td><td>{{ $penduduk->kewarganegaraan ?? 'WNI' }}</td></tr>
             <tr><td>Pekerjaan</td><td>:</td><td>{{ $penduduk->pekerjaan }}</td></tr>
             <tr><td>Alamat</td><td>:</td><td>{{ $penduduk->alamat_lengkap }}</td></tr>
         </table>
 
-        <p>Untuk menyelenggarakan acara/hajatan yang akan dilaksanakan pada:</p>
+        <p>Untuk menyelenggarakan acara/khajatan yang akan dilaksanakan pada:</p>
         
         <table style="margin-left: 15px;">
-            <tr><td class="w-30">Acara / Hajatan</td><td class="w-2">:</td><td><strong>{{ $details['acara'] }}</strong></td></tr>
+            <tr><td class="w-30">Acara / Khajatan</td><td class="w-2">:</td><td><strong>{{ $details['acara'] }}</strong></td></tr>
             <tr><td>Hari</td><td>:</td><td>{{ $details['hari'] }}</td></tr>
             <tr><td>Tanggal</td><td>:</td><td>{{ $details['tanggal'] }}</td></tr>
             <tr><td>Tempat</td><td>:</td><td>{{ $details['tempat'] }}</td></tr>
@@ -97,7 +98,7 @@
             <li>Pengeras suara dan/atau alat sejenisnya pada jam tertentu yaitu jam 07.00 WIB s/d jam 22.00 WIB harus beroperasi dengan volume wajar guna menjaga kenyamanan warga sekitar.</li>
         </ol>
         
-        <p>Demikian Surat Izin Hajatan ini diberikan untuk dapat dipergunakan sebagaimana mestinya dan agar mematuhi ketentuan-ketentuan di atas dengan penuh tanggung jawab.</p>
+        <p>Demikian Surat Izin Khajatan ini diberikan untuk dapat dipergunakan sebagaimana mestinya dan agar mematuhi ketentuan-ketentuan di atas dengan penuh tanggung jawab.</p>
     </div>
 
     <div class="signature-section">

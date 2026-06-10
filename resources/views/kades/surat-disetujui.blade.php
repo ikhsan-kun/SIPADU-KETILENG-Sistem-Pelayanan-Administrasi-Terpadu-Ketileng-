@@ -17,12 +17,12 @@
 
 {{-- Stats --}}
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <div class="card flex items-center justify-between border-emerald-100 bg-emerald-50/30">
+    <div class="card flex items-center justify-between border-blue-100 bg-blue-50/30">
         <div>
             <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Surat Disetujui</p>
-            <p class="text-4xl font-bold text-emerald-600">{{ $totalDisetujui }}</p>
+            <p class="text-4xl font-bold text-blue-600">{{ $totalDisetujui }}</p>
         </div>
-        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
+        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
     </div>
@@ -110,7 +110,7 @@
                 @forelse($suratSelesai as $surat)
                 <tr class="group hover:bg-slate-50 transition-colors">
                     <td>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md text-xs font-bold font-mono">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-bold font-mono">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>
                             {{ $surat->no_surat }}
                         </span>
@@ -136,7 +136,7 @@
                                 Lihat
                             </a>
                             @if($surat->surat_path)
-                            <a href="{{ route('kades.download', $surat) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-all" target="_blank">
+                            <a href="{{ route('kades.download', $surat) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-all" target="_blank">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 PDF
                             </a>

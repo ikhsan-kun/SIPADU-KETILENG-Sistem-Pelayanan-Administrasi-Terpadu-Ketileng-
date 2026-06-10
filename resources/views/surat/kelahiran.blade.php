@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Surat Keterangan Usaha (SKU)</title>
+    <title>Surat Keterangan Kelahiran</title>
     <style>
         body { font-family: 'Times New Roman', Times, serif; font-size: 10.5pt; line-height: 1.25; margin: 0.8cm 2cm; }
         .text-center { text-align: center; }
@@ -36,7 +36,6 @@
         <table style="width: 100%; border: none; margin-bottom: 5px;">
             <tr>
                 <td style="width: 15%; text-align: center; vertical-align: middle;">
-                    <!-- Silakan ganti src dengan path logo Kabupaten Tegal yang sesuai -->
                     <img src="{{ public_path('logo.png') }}" style="width: 85px; height: auto;" alt="Logo">
                 </td>
                 <td style="width: 85%; text-align: center; vertical-align: middle; line-height: 1.1;">
@@ -52,7 +51,7 @@
     </div>
 
     <div class="title-section text-center">
-        <h4 class="uppercase underline font-bold">SURAT KETERANGAN USAHA</h4>
+        <h4 class="uppercase underline font-bold">SURAT KETERANGAN KELAHIRAN</h4>
         <p>NOMOR : {{ $pengajuan->no_surat }}</p>
     </div>
 
@@ -60,22 +59,19 @@
         <p>Yang bertanda tangan di bawah ini Kepala Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal, dengan ini menerangkan bahwa:</p>
         
         <table>
-            <tr><td class="w-30">Nama Lengkap</td><td class="w-2">:</td><td><strong>{{ $penduduk->nama }}</strong></td></tr>
-            <tr><td>NIK</td><td>:</td><td>{{ $penduduk->nik }}</td></tr>
-            <tr><td>Tempat, Tgl Lahir</td><td>:</td><td>{{ $penduduk->tempat_lahir }}, {{ $penduduk->tanggal_lahir->format('d-m-Y') }}</td></tr>
-            <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $penduduk->jenis_kelamin }}</td></tr>
+            <tr><td class="w-30">Nama Orang Tua</td><td class="w-2">:</td><td><strong>{{ $penduduk->nama }}</strong></td></tr>
+            <tr><td>NIK Orang Tua</td><td>:</td><td>{{ $penduduk->nik }}</td></tr>
             <tr><td>Kewarganegaraan</td><td>:</td><td>{{ $penduduk->kewarganegaraan ?? 'WNI' }}</td></tr>
-            <tr><td>Pekerjaan</td><td>:</td><td>{{ $penduduk->pekerjaan }}</td></tr>
-            <tr><td>Alamat</td><td>:</td><td>{{ $penduduk->alamat_lengkap }}</td></tr>
+            <tr><td>Alamat Orang Tua</td><td>:</td><td>{{ $penduduk->alamat_lengkap }}</td></tr>
         </table>
 
-        <p>Berdasarkan pengamatan kami, bahwa nama tersebut di atas benar-benar penduduk Desa Ketileng dan yang bersangkutan memiliki / menjalankan usaha:</p>
+        <p>Berdasarkan laporan kependudukan yang masuk, telah lahir anak kandung dari orang tua tersebut di atas dengan rincian kelahiran sebagai berikut:</p>
         
-        <p class="text-center font-bold" style="font-size: 14pt; margin: 15px 0;">"{{ $pengajuan->keperluan }}"</p>
+        <p class="text-center font-bold">"{{ $pengajuan->keperluan }}"</p>
+
+        <p>Keterangan tersebut di atas benar-benar adalah warga Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal. Surat keterangan ini diterbitkan sebagai pengantar pembuatan Akta Kelahiran resmi anak.</p>
         
-        <p>Yang beralamat di Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal.</p>
-        
-        <p>Demikian Surat Keterangan Usaha (SKU) ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
+        <p>Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>
     </div>
 
     <div class="signature-section">

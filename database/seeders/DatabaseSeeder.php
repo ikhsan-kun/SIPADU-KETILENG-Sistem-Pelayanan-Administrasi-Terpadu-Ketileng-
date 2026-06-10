@@ -33,29 +33,29 @@ class DatabaseSeeder extends Seeder
             'address'  => 'Desa Ketileng, Kec. Kramat, Kab. Tegal',
         ]);
 
-        $warga1 = User::create([
-            'name'     => 'Budi Santoso',
-            'nik'      => '3328010101900001',
-            'password' => Hash::make('warga123'),
-            'role'     => 'warga',
-            'phone'    => '081234567892',
-        ]);
+        // $warga1 = User::create([
+        //     'name'     => 'Budi Santoso',
+        //     'nik'      => '3328010101900001',
+        //     'password' => Hash::make('warga123'),
+        //     'role'     => 'warga',
+        //     'phone'    => '081234567892',
+        // ]);
 
-        $warga2 = User::create([
-            'name'     => 'Siti Aminah',
-            'nik'      => '3328014504850002',
-            'password' => Hash::make('warga123'),
-            'role'     => 'warga',
-            'phone'    => '081234567893',
-        ]);
+        // $warga2 = User::create([
+        //     'name'     => 'Siti Aminah',
+        //     'nik'      => '3328014504850002',
+        //     'password' => Hash::make('warga123'),
+        //     'role'     => 'warga',
+        //     'phone'    => '081234567893',
+        // ]);
 
-        $warga3 = User::create([
-            'name'     => 'Ahmad Fauzi',
-            'nik'      => '3328011205780003',
-            'password' => Hash::make('warga123'),
-            'role'     => 'warga',
-            'phone'    => '081234567894',
-        ]);
+        // $warga3 = User::create([
+        //     'name'     => 'Ahmad Fauzi',
+        //     'nik'      => '3328011205780003',
+        //     'password' => Hash::make('warga123'),
+        //     'role'     => 'warga',
+        //     'phone'    => '081234567894',
+        // ]);
 
         // ── PENDUDUK ───────────────────────────────────────────────
         Penduduk::create([
@@ -133,7 +133,7 @@ class DatabaseSeeder extends Seeder
 
         // ── JENIS SURAT ────────────────────────────────────────────
         JenisSurat::firstOrCreate(
-            ['kode' => 'DOMISILI'],
+            ['kode' => 'SKD'],
             [
                 'nama'        => 'Surat Keterangan Domisili',
                 'deskripsi'   => 'Keterangan tempat tinggal saat ini.',
@@ -173,10 +173,60 @@ class DatabaseSeeder extends Seeder
         );
 
         JenisSurat::firstOrCreate(
-            ['kode' => 'HAJATAN'],
+            ['kode' => 'IKH'],
             [
-                'nama'        => 'Surat Izin Hajatan',
-                'deskripsi'   => 'Surat keterangan izin untuk menyelenggarakan acara/hajatan warga.',
+                'nama'        => 'Surat Izin Khajatan',
+                'deskripsi'   => 'Surat keterangan izin untuk menyelenggarakan acara/khajatan warga.',
+                'persyaratan' => ['ktp', 'kk'],
+                'aktif'       => true,
+            ]
+        );
+
+        JenisSurat::firstOrCreate(
+            ['kode' => 'KEMATIAN'],
+            [
+                'nama'        => 'Surat Keterangan Kematian',
+                'deskripsi'   => 'Surat keterangan untuk pelaporan kematian warga.',
+                'persyaratan' => ['ktp', 'kk'],
+                'aktif'       => true,
+            ]
+        );
+
+        JenisSurat::firstOrCreate(
+            ['kode' => 'KELAHIRAN'],
+            [
+                'nama'        => 'Surat Keterangan Kelahiran',
+                'deskripsi'   => 'Surat keterangan untuk pelaporan kelahiran anak.',
+                'persyaratan' => ['ktp', 'kk'],
+                'aktif'       => true,
+            ]
+        );
+
+        JenisSurat::firstOrCreate(
+            ['kode' => 'PINDAH'],
+            [
+                'nama'        => 'Surat Keterangan Pindah',
+                'deskripsi'   => 'Surat keterangan pengantar pindah domisili penduduk.',
+                'persyaratan' => ['ktp', 'kk'],
+                'aktif'       => true,
+            ]
+        );
+
+        JenisSurat::firstOrCreate(
+            ['kode' => 'BEDA_NAMA'],
+            [
+                'nama'        => 'Surat Keterangan Beda Nama',
+                'deskripsi'   => 'Surat pernyataan menerangkan nama berbeda dari orang yang sama.',
+                'persyaratan' => ['ktp', 'kk'],
+                'aktif'       => true,
+            ]
+        );
+
+        JenisSurat::firstOrCreate(
+            ['kode' => 'BELUM_NIKAH'],
+            [
+                'nama'        => 'Surat Keterangan Belum Menikah',
+                'deskripsi'   => 'Surat keterangan menyatakan belum pernah menikah.',
                 'persyaratan' => ['ktp', 'kk'],
                 'aktif'       => true,
             ]

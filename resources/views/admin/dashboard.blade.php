@@ -20,7 +20,7 @@
     </div>
     
     <div class="card flex items-center gap-4">
-        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
         </div>
         <div>
@@ -55,7 +55,7 @@
     <div class="card p-0 overflow-hidden flex flex-col">
         <div class="p-5 border-b border-slate-100 flex items-center justify-between">
             <h2 class="text-lg font-bold text-slate-800">Verifikasi Berkas</h2>
-            <a href="{{ route('admin.verifikasi.index') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Lihat Semua</a>
+            <a href="{{ route('admin.verifikasi.index') }}" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Semua</a>
         </div>
         <div class="flex-1 overflow-auto">
             @if($verifikasi_pending->isEmpty())
@@ -88,7 +88,7 @@
     <div class="card p-0 overflow-hidden flex flex-col">
         <div class="p-5 border-b border-slate-100 flex items-center justify-between">
             <h2 class="text-lg font-bold text-slate-800">Data Penduduk Terbaru</h2>
-            <a href="{{ route('admin.penduduk.index') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">Lihat Semua Data</a>
+            <a href="{{ route('admin.penduduk.index') }}" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Semua Data</a>
         </div>
         <div class="flex-1 overflow-auto">
             @if($penduduk_terbaru->isEmpty())

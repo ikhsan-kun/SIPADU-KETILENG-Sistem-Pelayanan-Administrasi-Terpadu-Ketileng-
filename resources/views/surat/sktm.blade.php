@@ -65,6 +65,7 @@
             <tr><td>No. KK</td><td>:</td><td>{{ $penduduk->no_kk }}</td></tr>
             <tr><td>Tempat, Tgl Lahir</td><td>:</td><td>{{ $penduduk->tempat_lahir }}, {{ $penduduk->tanggal_lahir->format('d-m-Y') }}</td></tr>
             <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $penduduk->jenis_kelamin }}</td></tr>
+            <tr><td>Kewarganegaraan</td><td>:</td><td>{{ $penduduk->kewarganegaraan ?? 'WNI' }}</td></tr>
             <tr><td>Agama</td><td>:</td><td>{{ $penduduk->agama }}</td></tr>
             <tr><td>Pekerjaan</td><td>:</td><td>{{ $penduduk->pekerjaan }}</td></tr>
             <tr><td>Alamat</td><td>:</td><td>{{ $penduduk->alamat_lengkap }}</td></tr>

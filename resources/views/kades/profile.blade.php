@@ -13,19 +13,19 @@
         {{-- Card Info TTE --}}
         <div class="card bg-slate-900 text-white relative overflow-hidden">
             {{-- Decorative Glow --}}
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl"></div>
             
             <div class="relative z-10 flex flex-col items-center text-center py-4">
-                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-3xl font-extrabold border-2 border-emerald-500/40 mb-4 shadow-inner">
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-3xl font-extrabold border-2 border-blue-500/40 mb-4 shadow-inner">
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                 </div>
                 <h3 class="text-lg font-bold">{{ $user->name }}</h3>
-                <p class="text-emerald-400 text-xs font-semibold tracking-wider uppercase mt-1">Kepala Desa Ketileng</p>
+                <p class="text-blue-400 text-xs font-semibold tracking-wider uppercase mt-1">Kepala Desa Ketileng</p>
                 
                 {{-- Status Badge TTE --}}
-                <div class="mt-5 px-3 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold rounded-full flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 absolute"></span>
+                <div class="mt-5 px-3 py-1.5 bg-blue-500/15 border border-blue-500/30 text-blue-400 text-xs font-bold rounded-full flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-blue-400 absolute"></span>
                     Tanda Tangan Elektronik Aktif
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="flex justify-between">
                     <span>Sertifikasi Sistem</span>
-                    <span class="font-semibold text-emerald-400">Terverifikasi (Internal)</span>
+                    <span class="font-semibold text-blue-400">Terverifikasi (Internal)</span>
                 </div>
                 <div class="flex justify-between">
                     <span>Wewenang</span>
@@ -52,7 +52,7 @@
             <div class="space-y-4">
                 <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center">
+                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>

@@ -15,7 +15,7 @@
         <p class="text-xs text-slate-500 mt-1">Total Pengajuan</p>
     </div>
     <div class="card-sm text-center">
-        <p class="text-2xl font-bold text-emerald-600">{{ $stats['selesai'] }}</p>
+        <p class="text-2xl font-bold text-blue-600">{{ $stats['selesai'] }}</p>
         <p class="text-xs text-slate-500 mt-1">Selesai</p>
     </div>
     <div class="card-sm text-center">
@@ -71,8 +71,8 @@
 
             {{-- Step 4 --}}
             <div class="relative z-10 flex flex-col items-center text-center group">
-                <div class="w-16 h-16 bg-white border-4 border-slate-50 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:border-emerald-50 group-hover:shadow-md transition-all duration-300">
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
+                <div class="w-16 h-16 bg-white border-4 border-slate-50 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:border-blue-50 group-hover:shadow-md transition-all duration-300">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                 </div>

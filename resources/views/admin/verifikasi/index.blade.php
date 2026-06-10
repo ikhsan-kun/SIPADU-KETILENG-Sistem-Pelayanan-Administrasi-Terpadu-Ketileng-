@@ -13,15 +13,15 @@
     <div class="p-4 border-b border-slate-100 bg-slate-50 flex flex-wrap gap-4 items-center justify-between">
         <div class="flex gap-2">
             <a href="{{ route('admin.verifikasi.index', ['status' => 'menunggu']) }}" 
-               class="px-4 py-2 text-sm font-medium rounded-lg {{ $status == 'menunggu' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
+               class="px-4 py-2 text-sm font-medium rounded-lg {{ $status == 'menunggu' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
                 Menunggu Verifikasi
             </a>
             <a href="{{ route('admin.verifikasi.index', ['status' => 'diproses']) }}" 
-               class="px-4 py-2 text-sm font-medium rounded-lg {{ $status == 'diproses' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
+               class="px-4 py-2 text-sm font-medium rounded-lg {{ $status == 'diproses' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
                 Diteruskan ke Kades
             </a>
             <a href="{{ route('admin.verifikasi.index', ['status' => 'ditolak']) }}" 
-               class="px-4 py-2 text-sm font-medium rounded-lg {{ $status == 'ditolak' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
+               class="px-4 py-2 text-sm font-medium rounded-lg {{ $status == 'ditolak' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
                 Ditolak
             </a>
         </div>

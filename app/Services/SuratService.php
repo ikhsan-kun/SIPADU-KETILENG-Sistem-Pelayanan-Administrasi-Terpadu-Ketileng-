@@ -24,12 +24,17 @@ class SuratService
         // 3. Tentukan template berdasarkan kode jenis surat
         $kode     = $pengajuan->jenisSurat->kode;
         $template = match($kode) {
-            'SKTM'     => 'surat.sktm',
-            'SKCK'     => 'surat.skck',
-            'SKU'      => 'surat.sku',
-            'DOMISILI' => 'surat.domisili',
-            'HAJATAN'  => 'surat.hajatan',
-            default    => 'surat.domisili',
+            'SKTM'        => 'surat.sktm',
+            'SKCK'        => 'surat.skck',
+            'SKU'         => 'surat.sku',
+            'SKD'         => 'surat.domisili',
+            'IKH'         => 'surat.hajatan',
+            'KEMATIAN'    => 'surat.kematian',
+            'KELAHIRAN'   => 'surat.kelahiran',
+            'PINDAH'      => 'surat.pindah',
+            'BEDA_NAMA'   => 'surat.beda_nama',
+            'BELUM_NIKAH' => 'surat.belum_nikah',
+            default       => 'surat.domisili',
         };
 
         // 4. Generate PDF

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Warga\DashboardController as WargaDashboard;
 use App\Http\Controllers\Warga\PengajuanController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
@@ -15,11 +16,72 @@ use Illuminate\Support\Facades\Route;
 // ── HALAMAN UTAMA ──────────────────────────────────────────────────────────
 try {
     \App\Models\User::where('role', 'kades')->where('name', '!=', 'MASRUDIYANTO AM.d')->update(['name' => 'MASRUDIYANTO AM.d']);
+    
+    // Update existing DOMISILI code to SKD
+    \App\Models\JenisSurat::where('kode', 'DOMISILI')->update(['kode' => 'SKD']);
+    
+    // Update existing HAJATAN code to IKH
+    \App\Models\JenisSurat::where('kode', 'HAJATAN')->update([
+        'kode' => 'IKH',
+        'nama' => 'Surat Izin Khajatan',
+        'deskripsi' => 'Surat keterangan izin untuk menyelenggarakan acara/khajatan warga.',
+    ]);
+    
     \App\Models\JenisSurat::firstOrCreate(
-        ['kode' => 'HAJATAN'],
+        ['kode' => 'IKH'],
         [
-            'nama'        => 'Surat Izin Hajatan',
-            'deskripsi'   => 'Surat keterangan izin untuk menyelenggarakan acara/hajatan warga.',
+            'nama'        => 'Surat Izin Khajatan',
+            'deskripsi'   => 'Surat keterangan izin untuk menyelenggarakan acara/khajatan warga.',
+            'persyaratan' => ['ktp', 'kk'],
+            'aktif'       => true,
+        ]
+    );
+
+    \App\Models\JenisSurat::firstOrCreate(
+        ['kode' => 'KEMATIAN'],
+        [
+            'nama'        => 'Surat Keterangan Kematian',
+            'deskripsi'   => 'Surat keterangan untuk pelaporan kematian warga.',
+            'persyaratan' => ['ktp', 'kk'],
+            'aktif'       => true,
+        ]
+    );
+
+    \App\Models\JenisSurat::firstOrCreate(
+        ['kode' => 'KELAHIRAN'],
+        [
+            'nama'        => 'Surat Keterangan Kelahiran',
+            'deskripsi'   => 'Surat keterangan untuk pelaporan kelahiran anak.',
+            'persyaratan' => ['ktp', 'kk'],
+            'aktif'       => true,
+        ]
+    );
+
+    \App\Models\JenisSurat::firstOrCreate(
+        ['kode' => 'PINDAH'],
+        [
+            'nama'        => 'Surat Keterangan Pindah',
+            'deskripsi'   => 'Surat keterangan pengantar pindah domisili penduduk.',
+            'persyaratan' => ['ktp', 'kk'],
+            'aktif'       => true,
+        ]
+    );
+
+    \App\Models\JenisSurat::firstOrCreate(
+        ['kode' => 'BEDA_NAMA'],
+        [
+            'nama'        => 'Surat Keterangan Beda Nama',
+            'deskripsi'   => 'Surat pernyataan menerangkan nama berbeda dari orang yang sama.',
+            'persyaratan' => ['ktp', 'kk'],
+            'aktif'       => true,
+        ]
+    );
+
+    \App\Models\JenisSurat::firstOrCreate(
+        ['kode' => 'BELUM_NIKAH'],
+        [
+            'nama'        => 'Surat Keterangan Belum Menikah',
+            'deskripsi'   => 'Surat keterangan menyatakan belum pernah menikah.',
             'persyaratan' => ['ktp', 'kk'],
             'aktif'       => true,
         ]
@@ -49,6 +111,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login.post');
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+    
+    // Reset Password Mandiri
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'verifyNikKk'])->name('password.verify');
+    Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 

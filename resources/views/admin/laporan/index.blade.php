@@ -28,8 +28,8 @@
             </select>
         </div>
         <button type="submit" class="btn-primary py-3">Filter Laporan</button>
-        <a href="{{ route('admin.laporan.excel', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="btn-outline py-3 ml-auto bg-white border-slate-300 hover:text-emerald-700 hover:border-emerald-400 hover:bg-emerald-50 transition-colors inline-flex items-center gap-2">
-            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <a href="{{ route('admin.laporan.excel', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="btn-outline py-3 ml-auto bg-white border-slate-300 hover:text-blue-700 hover:border-blue-400 hover:bg-blue-50 transition-colors inline-flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Export Excel
         </a>
     </form>
@@ -42,7 +42,7 @@
     </div>
     <div class="card-sm text-center">
         <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Selesai</p>
-        <p class="text-3xl font-bold text-emerald-600">{{ $rekap['selesai'] }}</p>
+        <p class="text-3xl font-bold text-blue-600">{{ $rekap['selesai'] }}</p>
     </div>
     <div class="card-sm text-center">
         <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Dalam Proses</p>

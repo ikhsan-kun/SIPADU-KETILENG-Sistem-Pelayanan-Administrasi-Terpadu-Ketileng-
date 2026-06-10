@@ -13,22 +13,22 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'total_penduduk'  => Penduduk::count(),
-            'berkas_masuk'    => PengajuanSurat::whereIn('status', ['menunggu'])->count(),
-            'perlu_tinjauan'  => PengajuanSurat::where('status', 'menunggu')->count(),
-            'selesai'         => PengajuanSurat::where('status', 'selesai')->count(),
-            'diproses'        => PengajuanSurat::where('status', 'diproses')->count(),
+            'total_penduduk'  => Penduduk::query()->count(),
+            'berkas_masuk'    => PengajuanSurat::query()->whereIn('status', ['menunggu'])->count(),
+            'perlu_tinjauan'  => PengajuanSurat::query()->where('status', 'menunggu')->count(),
+            'selesai'         => PengajuanSurat::query()->where('status', 'selesai')->count(),
+            'diproses'        => PengajuanSurat::query()->where('status', 'diproses')->count(),
         ];
 
-        $penduduk_terbaru = Penduduk::latest()->take(5)->get();
+        $penduduk_terbaru = Penduduk::query()->latest()->take(5)->get();
 
-        $verifikasi_pending = PengajuanSurat::where('status', 'menunggu')
+        $verifikasi_pending = PengajuanSurat::query()->where('status', 'menunggu')
             ->with(['penduduk', 'jenisSurat', 'user'])
             ->latest()
             ->take(5)
             ->get();
 
-        $arsip_surat = PengajuanSurat::where('status', 'selesai')
+        $arsip_surat = PengajuanSurat::query()->where('status', 'selesai')
             ->whereDate('approved_at', today())
             ->with('jenisSurat')
             ->latest('approved_at')
@@ -37,11 +37,11 @@ class DashboardController extends Controller
 
         // Ringkasan kinerja bulan ini
         $bulan_ini = [
-            'selesai' => PengajuanSurat::where('status', 'selesai')
+            'selesai' => PengajuanSurat::query()->where('status', 'selesai')
                 ->whereMonth('approved_at', now()->month)
                 ->whereYear('approved_at', now()->year)
                 ->count(),
-            'diproses' => PengajuanSurat::whereIn('status', ['diproses', 'disetujui'])
+            'diproses' => PengajuanSurat::query()->whereIn('status', ['diproses', 'disetujui'])
                 ->count(),
         ];
 
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             'password'         => 'required|string|min:6|confirmed',
         ]);
 
-        $user = auth()->user();
+        $user = \App\Models\User::find(auth()->id());
 
         if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
             return back()->with('error', 'Kata sandi saat ini salah!');

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/png" href="{{ asset('download.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') – Desa Ketileng</title>
@@ -85,14 +86,12 @@
     <aside id="sidebar" class="bg-slate-900 flex flex-col fixed inset-y-0 left-0 z-50">
         <div class="p-5 border-b border-slate-800">
             <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <img src="{{ asset('download.png') }}" alt="logo" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <p class="text-white font-bold text-sm leading-none">Desa Digital</p>
-                    <p class="text-slate-500 text-xs">Admin Panel</p>
+                    <p class="text-white font-bold text-sm leading-none">SIPADU</p>
+                    <p class="text-slate-500 text-xs">Admin Panel - Ketileng</p>
                 </div>
             </div>
         </div>
@@ -140,7 +139,7 @@
                     </a>
                 </div>
                 <div class="relative" style="position: relative;">
-                    <button id="profile-dropdown-btn" class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-emerald-600 transition-colors focus:outline-none">
+                    <button id="profile-dropdown-btn" class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors focus:outline-none">
                         {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                     </button>
                     
@@ -176,6 +175,25 @@
         @endif
 
         <main class="flex-1 p-4 md:p-8">@yield('content')</main>
+
+        {{-- Footer UHN --}}
+        <footer style="background-color: #f8f9fa; border-top: 1px solid #e2e8f0; padding: 16px 48px; flex-shrink: 0; width: 100%; position: relative; z-index: 20;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 38px; height: 38px; padding: 6px; background-color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #f1f5f9; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+                        <img src="{{ asset('uhn.png') }}" alt="UHN Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
+                        <p style="color: #1e293b; font-size: 11px; letter-spacing: 0.08em; line-height: 1; margin: 0 0 4px 0; font-weight: 700; text-transform: uppercase;">Universitas Harkat Negeri</p>
+                        <p style="color: #64748b; font-size: 9px; letter-spacing: 0.1em; line-height: 1; margin: 0; font-weight: 600; text-transform: uppercase;">Prodi Teknik Komputer</p>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center; text-align: right;">
+                    <p style="color: #1e293b; font-size: 11px; letter-spacing: 0.08em; line-height: 1; margin: 0 0 4px 0; font-weight: 700; text-transform: uppercase;">© 2026 Tugas Akhir.</p>
+                    <p style="color: #64748b; font-size: 9px; letter-spacing: 0.1em; line-height: 1; margin: 0; font-weight: 600; text-transform: uppercase;">All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
     </div>
 </div>
 {{-- ── MODAL GANTI PASSWORD ADMIN ── --}}
@@ -184,7 +202,7 @@
         {{-- Header Modal --}}
         <div class="px-6 py-4.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 Ganti Password Admin
             </h3>
             <button type="button" id="close-password-modal-btn" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors">
@@ -198,24 +216,24 @@
             
             <div>
                 <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5" for="current_password">Password Sekarang</label>
-                <input type="password" name="current_password" id="current_password" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all" placeholder="Masukkan password saat ini">
+                <input type="password" name="current_password" id="current_password" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" placeholder="Masukkan password saat ini">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5" for="password">Password Baru</label>
-                <input type="password" name="password" id="password" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all" placeholder="Minimal 6 karakter">
+                <input type="password" name="password" id="password" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" placeholder="Minimal 6 karakter">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5" for="password_confirmation">Konfirmasi Password Baru</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all" placeholder="Ulangi password baru">
+                <input type="password" name="password_confirmation" id="password_confirmation" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" placeholder="Ulangi password baru">
             </div>
 
             <div class="border-t border-slate-100 pt-4 mt-6 flex items-center justify-end gap-2.5">
                 <button type="button" id="cancel-password-modal-btn" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-colors">
                     Batal
                 </button>
-                <button type="submit" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-1.5">
+                <button type="submit" class="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     Simpan
                 </button>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/png" href="{{ asset('download.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Akun – Desa Ketileng</title>
@@ -10,20 +11,6 @@
     @livewireStyles
 
     <style>
-        /* Step indicator animation */
-        .step-item {
-            opacity: 0;
-            transform: translateY(10px);
-            animation: stepFadeIn 0.5s ease forwards;
-        }
-        .step-item:nth-child(1) { animation-delay: 0.1s; }
-        .step-item:nth-child(2) { animation-delay: 0.2s; }
-        .step-item:nth-child(3) { animation-delay: 0.3s; }
-
-        @keyframes stepFadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         /* Smooth shake animation for errors */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -39,28 +26,27 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-white font-[Inter]">
+<body class="min-h-screen bg-white font-[Inter] flex flex-col">
 
-<div class="flex min-h-screen">
+<div class="flex flex-1 relative min-h-0">
     {{-- LEFT: Gambar / Branding --}}
-    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-900">
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900"></div>
-        {{-- Grid pattern overlay --}}
-        <div class="absolute inset-0 opacity-10"
-             style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-950">
+        {{-- Background Image sama seperti login --}}
+        <div class="absolute inset-0 bg-cover bg-center transition-all duration-700 transform scale-105 hover:scale-100"
+             style="background-image: url('{{ asset('images/bg_desa.png') }}');">
         </div>
+        {{-- Premium Vignette Dark Gradient Overlay --}}
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-900/20 to-slate-950/95"></div>
+
         <div class="relative z-10 flex flex-col justify-between p-10 w-full">
             {{-- Logo --}}
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center">
+                    <img src="{{ asset('download.png') }}" alt="logo" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <p class="text-white font-bold text-lg leading-none">Desa Digital</p>
-                    <p class="text-slate-400 text-xs">Governance Portal</p>
+                    <p class="text-white font-bold text-lg leading-none">SIPADU</p>
+                    <p class="text-blue-300/90 font-semibold text-xs mt-0.5 tracking-wide">Desa Ketileng</p>
                 </div>
             </div>
 
@@ -76,24 +62,6 @@
                     </p>
                 </div>
 
-                {{-- Step indicators --}}
-                <div class="space-y-3">
-                    <p class="text-emerald-400 text-xs font-semibold uppercase tracking-wider">Cara Mendaftar</p>
-                    <div class="space-y-2.5">
-                        <div class="step-item flex items-center gap-3">
-                            <div class="w-7 h-7 bg-emerald-500/20 border border-emerald-500/40 rounded-lg flex items-center justify-center text-emerald-400 text-xs font-bold flex-shrink-0">1</div>
-                            <span class="text-slate-300 text-sm">Masukkan NIK sesuai KTP Anda</span>
-                        </div>
-                        <div class="step-item flex items-center gap-3">
-                            <div class="w-7 h-7 bg-emerald-500/20 border border-emerald-500/40 rounded-lg flex items-center justify-center text-emerald-400 text-xs font-bold flex-shrink-0">2</div>
-                            <span class="text-slate-300 text-sm">Verifikasi No. KK & Tanggal Lahir</span>
-                        </div>
-                        <div class="step-item flex items-center gap-3">
-                            <div class="w-7 h-7 bg-emerald-500/20 border border-emerald-500/40 rounded-lg flex items-center justify-center text-emerald-400 text-xs font-bold flex-shrink-0">3</div>
-                            <span class="text-slate-300 text-sm">Buat kata sandi dan mulai gunakan</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             {{-- Bottom info --}}
@@ -109,22 +77,19 @@
     </div>
 
     {{-- RIGHT: Form Register --}}
-    <div class="flex-1 flex items-center justify-center p-8 bg-white">
+    <div class="flex-1 flex items-center justify-center p-8 bg-white relative overflow-hidden">
         <div class="w-full max-w-md space-y-6">
             {{-- Mobile logo --}}
             <div class="lg:hidden flex items-center gap-2 mb-4">
-                <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center">
+                    <img src="{{ asset('download.png') }}" alt="logo" class="w-full h-full object-contain">
                 </div>
-                <span class="font-bold text-slate-800">Desa Ketileng</span>
+                <span class="font-bold text-slate-800">SIPADU Desa Ketileng</span>
             </div>
 
             <div>
-                <h2 class="text-3xl font-bold text-slate-900">Daftar Akun Warga</h2>
-                <p class="text-slate-500 mt-2 text-sm leading-relaxed">
+                <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-blue-800 tracking-tight">Daftar Akun Warga</h2>
+                <p class="text-slate-500 mt-2 text-sm leading-relaxed font-medium">
                     Verifikasi identitas Anda menggunakan data kependudukan yang sudah terdaftar di desa.
                 </p>
             </div>
@@ -300,20 +265,39 @@
             {{-- Link ke Login --}}
             <p class="text-center text-slate-500 text-sm">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors">
+                <a href="{{ route('login') }}" class="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
                     Masuk di sini
                 </a>
             </p>
 
             <p class="text-center text-slate-400 text-xs">
                 Butuh bantuan?
-                <a href="https://wa.me/6281234567890" class="text-slate-600 font-semibold hover:text-emerald-600 transition-colors">
+                <a href="https://wa.me/6281234567890" class="text-slate-600 font-semibold hover:text-blue-600 transition-colors">
                     Hubungi Administrator Desa
                 </a>
             </p>
         </div>
     </div>
 </div>
+
+{{-- Footer UHN --}}
+<footer style="background-color: #f8f9fa; border-top: 1px solid #e2e8f0; padding: 16px 48px; flex-shrink: 0; width: 100%; position: relative; z-index: 20;">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 38px; height: 38px; padding: 6px; background-color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #f1f5f9; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+                <img src="{{ asset('uhn.png') }}" alt="UHN Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
+                <p style="color: #1e293b; font-size: 11px; letter-spacing: 0.08em; line-height: 1; margin: 0 0 4px 0; font-weight: 700; text-transform: uppercase;">Universitas Harkat Negeri</p>
+                <p style="color: #64748b; font-size: 9px; letter-spacing: 0.1em; line-height: 1; margin: 0; font-weight: 600; text-transform: uppercase;">Prodi Teknik Komputer</p>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; text-align: right;">
+            <p style="color: #1e293b; font-size: 11px; letter-spacing: 0.08em; line-height: 1; margin: 0 0 4px 0; font-weight: 700; text-transform: uppercase;">© 2026 Tugas Akhir.</p>
+            <p style="color: #64748b; font-size: 9px; letter-spacing: 0.1em; line-height: 1; margin: 0; font-weight: 600; text-transform: uppercase;">All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
 
 @livewireScripts
 </body>

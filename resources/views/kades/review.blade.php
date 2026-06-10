@@ -28,29 +28,29 @@
                     </div>
 
                     <div class="text-sm leading-relaxed mb-6 space-y-2">
-                        @if($pengajuan->jenisSurat->kode === 'HAJATAN')
+                        @if($pengajuan->jenisSurat->kode === 'IKH')
                             @php
                                 $details = json_decode($pengajuan->keperluan, true);
                                 if (!is_array($details)) {
                                     $details = ['acara' => $pengajuan->keperluan, 'hari' => '-', 'tanggal' => '-', 'tempat' => '-', 'hiburan' => '-'];
                                 }
                             @endphp
-                            <p>Yang bertanda tangan di bawah ini Kepala Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal memberikan <strong>IZIN HAJATAN</strong> kepada:</p>
+                            <p>Yang bertanda tangan di bawah ini Kepala Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal memberikan <strong>IZIN KHAJATAN</strong> kepada:</p>
                             <table class="w-full ml-4 mb-4">
                                 <tr><td class="w-40 py-1">Nama Lengkap</td><td>: <strong>{{ $pengajuan->penduduk->nama }}</strong></td></tr>
                                 <tr><td class="py-1">Umur</td><td>: {{ $pengajuan->penduduk->umur }} Tahun</td></tr>
                                 <tr><td class="py-1">Pekerjaan</td><td>: {{ $pengajuan->penduduk->pekerjaan }}</td></tr>
                                 <tr><td class="py-1 align-top">Alamat</td><td>: {{ $pengajuan->penduduk->alamat_lengkap }}</td></tr>
                             </table>
-                            <p class="mt-2">Untuk menyelenggarakan acara/hajatan yang akan dilaksanakan pada:</p>
+                            <p class="mt-2">Untuk menyelenggarakan acara/khajatan yang akan dilaksanakan pada:</p>
                             <table class="w-full ml-4 mb-4">
-                                <tr><td class="w-40 py-1">Acara / Hajatan</td><td>: <strong>{{ $details['acara'] }}</strong></td></tr>
+                                <tr><td class="w-40 py-1">Acara / Khajatan</td><td>: <strong>{{ $details['acara'] }}</strong></td></tr>
                                 <tr><td class="py-1">Hari</td><td>: {{ $details['hari'] }}</td></tr>
                                 <tr><td class="py-1">Tanggal</td><td>: {{ $details['tanggal'] }}</td></tr>
                                 <tr><td class="py-1">Tempat</td><td>: {{ $details['tempat'] }}</td></tr>
                                 <tr><td class="py-1">Hiburan</td><td>: {{ $details['hiburan'] }}</td></tr>
                             </table>
-                            <p class="mt-2">Demikian Surat Izin Hajatan ini diberikan untuk dapat dipergunakan sebagaimana mestinya.</p>
+                            <p class="mt-2">Demikian Surat Izin Khajatan ini diberikan untuk dapat dipergunakan sebagaimana mestinya.</p>
                         @else
                             <p>Yang bertanda tangan di bawah ini Kepala Desa Ketileng, Kecamatan Kramat, Kabupaten Tegal menerangkan dengan sebenarnya bahwa:</p>
                             <table class="w-full ml-4">
@@ -78,34 +78,23 @@
                 </div>
             </div>
             
-            {{-- Dokumen Lampiran --}}
-            <div class="card">
-                <h2 class="text-base font-bold text-slate-800 mb-4">Lampiran (Verifikasi Admin)</h2>
-                <div class="flex flex-wrap gap-3">
-                    @foreach($pengajuan->dokumen as $dok)
-                        <a href="{{ route('admin.verifikasi.dokumen', [$pengajuan, strtolower($dok->jenis_dokumen)]) }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg hover:border-blue-400 hover:text-blue-600 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                            <span class="text-sm font-medium">{{ $dok->jenis_dokumen }}</span>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
+
         </div>
 
         {{-- Kanan: Aksi --}}
         <div class="space-y-6">
             <div class="card bg-slate-900 text-white">
                 <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     Aksi Persetujuan
                 </h2>
                 <p class="text-sm text-slate-400 mb-6 leading-relaxed">
                     Dengan menyetujui dokumen ini, sistem akan otomatis membubuhkan Tanda Tangan Elektronik berupa QR Code yang sah.
                 </p>
 
-                <form action="{{ route('kades.approve', $pengajuan) }}" method="POST" class="mb-3" onsubmit="return confirm('Anda yakin ingin menyetujui dan menandatangani dokumen ini?');">
+                <form id="approveForm" action="{{ route('kades.approve', $pengajuan) }}" method="POST" class="mb-3">
                     @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all duration-200">
+                    <button type="button" onclick="openApproveModal()" class="w-full flex items-center justify-center gap-2 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all duration-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         Setujui & Terbitkan QR
                     </button>
@@ -141,4 +130,86 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Konfirmasi Setuju Kades -->
+<div id="confirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden animate-fade-in">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform scale-95 opacity-0 transition-all duration-300 relative overflow-hidden" id="modalContainer">
+        <!-- Background Accent -->
+        <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100/50 rounded-full blur-2xl -mr-6 -mt-6"></div>
+        
+        <!-- Header / Icon -->
+        <div class="flex items-center gap-4 mb-4 relative z-10">
+            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 shadow-inner flex-shrink-0">
+                <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+            </div>
+            <div class="text-left">
+                <h3 class="text-lg font-bold text-slate-900 leading-snug">Konfirmasi Tanda Tangan</h3>
+                <p class="text-xs text-slate-400 font-medium">SIPADU - TTE Desa Ketileng</p>
+            </div>
+        </div>
+
+        <!-- Body Content -->
+        <div class="text-sm text-slate-600 text-left leading-relaxed mb-6 relative z-10">
+            Apakah Bapak Kepala Desa yakin ingin menyetujui dan membubuhkan **Tanda Tangan Elektronik (TTE)** secara sah berupa QR Code pada dokumen ini?
+            
+            <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 mt-3 flex flex-col gap-1 text-xs">
+                <div class="flex justify-between"><span class="text-slate-400">Nama Dokumen:</span><span class="font-semibold text-slate-800">{{ $pengajuan->jenisSurat->nama }}</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Pemohon:</span><span class="font-semibold text-slate-800">{{ $pengajuan->penduduk->nama }}</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">NIK:</span><span class="font-mono text-slate-700">{{ $pengajuan->penduduk->nik }}</span></div>
+            </div>
+        </div>
+
+        <!-- Buttons / Actions -->
+        <div class="flex items-center gap-3 relative z-10">
+            <button type="button" onclick="closeApproveModal()" class="flex-1 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl transition-all duration-200">
+                Batal
+            </button>
+            <button type="button" onclick="submitApproveForm()" class="flex-1 py-2.5 font-bold text-xs rounded-xl transition-all duration-200 shadow-lg shadow-blue-100 flex items-center justify-center gap-1.5" style="background-color: #10b981; color: #ffffff !important;">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Ya, Setujui
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+</style>
+
+<script>
+function openApproveModal() {
+    const modal = document.getElementById('confirmModal');
+    const container = document.getElementById('modalContainer');
+    modal.classList.remove('hidden');
+    // Trigger animations
+    setTimeout(() => {
+        container.classList.remove('scale-95', 'opacity-0');
+        container.classList.add('scale-100', 'opacity-100');
+    }, 10);
+}
+
+function closeApproveModal() {
+    const modal = document.getElementById('confirmModal');
+    const container = document.getElementById('modalContainer');
+    container.classList.add('scale-95', 'opacity-0');
+    container.classList.remove('scale-100', 'opacity-100');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 200);
+}
+
+function submitApproveForm() {
+    document.getElementById('approveForm').submit();
+}
+</script>
 @endsection

@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="{{ asset('download.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login – Desa Ketileng</title>
+    <title>Lupa Kata Sandi – Desa Ketileng</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -41,11 +41,9 @@
 <div class="flex flex-1 relative min-h-0">
     {{-- LEFT: Gambar / Branding --}}
     <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-950">
-        {{-- Background Image with Unsplash Fallback --}}
         <div class="absolute inset-0 bg-cover bg-center transition-all duration-700 transform scale-105 hover:scale-100" 
              style="background-image: url('{{ asset('images/bg_desa.png') }}');">
         </div>
-        {{-- Premium Vignette Dark Gradient Overlay for optimal text contrast --}}
         <div class="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-900/20 to-slate-950/95"></div>
         <div class="relative z-10 flex flex-col justify-between p-10 w-full">
             {{-- Logo --}}
@@ -63,17 +61,16 @@
             <div class="space-y-6">
                 <div class="space-y-3">
                     <h1 class="text-white text-4xl font-bold leading-tight">
-                        Transformasi<br>Layanan Publik<br>Desa Anda
+                        Akses Portal<br>Pelayanan Digital<br>Desa Ketileng
                     </h1>
                     <p class="text-slate-200 text-base leading-relaxed max-w-sm">
-                        Platform tata kelola modern untuk administrasi yang lebih cepat, transparan,
-                        dan terintegrasi langsung dengan data kependudukan.
+                        Verifikasi identitas kependudukan Anda untuk memulihkan akses akun mandiri secara aman.
                     </p>
                 </div>
 
                 {{-- Feature chips --}}
                 <div class="flex flex-wrap gap-2">
-                    @foreach(['QR Code Terverifikasi','Pengajuan Online','Real-time Status','3 Level Akses'] as $f)
+                    @foreach(['Verifikasi NIK & KK','Pemulihan Mandiri','Keamanan 256-bit','Tanpa Email'] as $f)
                     <span class="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-xs text-white font-medium">
                         {{ $f }}
                     </span>
@@ -93,13 +90,12 @@
         </div>
     </div>
 
-    {{-- RIGHT: Form Login --}}
+    {{-- RIGHT: Form Lupa Password --}}
     <div class="flex-1 flex items-center justify-center p-6 sm:p-12 md:p-16 bg-slate-950 lg:bg-white relative overflow-hidden">
-        {{-- Mobile Background Image (Visible on mobile only, hidden on desktop, low opacity) --}}
+        {{-- Mobile Background --}}
         <div class="absolute inset-0 bg-cover bg-center lg:hidden z-0 opacity-15 scale-105" 
              style="background-image: url('{{ asset('images/bg_desa.png') }}');">
         </div>
-        {{-- Very dark overlay - stronger at bottom for maximum readability --}}
         <div class="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/92 to-slate-950 lg:hidden z-0"></div>
 
         {{-- Form Container --}}
@@ -108,11 +104,7 @@
             {{-- Mobile logo --}}
             <div class="lg:hidden flex items-center gap-2 mb-6">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center">
-                    {{-- <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg> --}}
-                    <img src="{{ asset('download.png') }}" alt="logo">
+                    <img src="{{ asset('download.png') }}" alt="logo" class="w-full h-full object-contain">
                 </div>
                 <span class="font-bold text-white">SIPADU Desa Ketileng</span>
             </div>
@@ -120,34 +112,39 @@
             <div class="space-y-3">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 lg:bg-blue-50 border border-white/20 lg:border-blue-100 backdrop-blur-md lg:backdrop-blur-none shadow-sm mb-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-400 lg:bg-blue-600 animate-pulse"></span>
-                    <p class="text-[10px] font-bold text-white lg:text-blue-600 uppercase tracking-widest mobile-text-shadow lg:!shadow-none">Sistem Administrasi Terpadu</p>
+                    <p class="text-[10px] font-bold text-white lg:text-blue-600 uppercase tracking-widest mobile-text-shadow lg:!shadow-none">Pemulihan Akun Warga</p>
                 </div>
-                <h2 class="text-3xl lg:text-4xl font-extrabold text-white lg:text-transparent lg:bg-clip-text lg:bg-gradient-to-br lg:from-slate-900 lg:to-blue-800 tracking-tight mobile-text-shadow lg:!shadow-none">Selamat Datang</h2>
+                <h2 class="text-3xl lg:text-4xl font-extrabold text-white lg:text-transparent lg:bg-clip-text lg:bg-gradient-to-br lg:from-slate-900 lg:to-blue-800 tracking-tight mobile-text-shadow lg:!shadow-none">Lupa Kata Sandi?</h2>
                 <p class="text-white/90 lg:text-slate-500 text-sm leading-relaxed mobile-text-shadow lg:!shadow-none font-medium">
-                    Silakan masuk menggunakan NIK (untuk warga) atau Email (untuk Admin/Kades) Anda untuk mengakses portal pelayanan digital.
+                    Silakan masukkan NIK dan Nomor KK Anda yang terdaftar pada database kependudukan Desa Ketileng untuk memverifikasi akun Anda.
                 </p>
             </div>
 
             {{-- Alert error --}}
-            @if($errors->has('login'))
+            @if($errors->has('nik'))
             <div class="alert-error flex items-center gap-2">
                 <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                 </svg>
-                {{ $errors->first('login') }}
+                {{ $errors->first('nik') }}
             </div>
             @endif
 
-            @if(session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
+            @if($errors->has('no_kk'))
+            <div class="alert-error flex items-center gap-2">
+                <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                </svg>
+                {{ $errors->first('no_kk') }}
+            </div>
             @endif
 
-            <form method="POST" action="{{ route('login.post') }}" class="space-y-6">
+            <form method="POST" action="{{ route('password.verify') }}" class="space-y-6">
                 @csrf
 
-                {{-- NIK atau Email --}}
+                {{-- NIK --}}
                 <div>
-                    <label for="login" class="login-label form-label text-white">NIK atau Email</label>
+                    <label for="nik" class="login-label form-label text-white">Nomor Induk Kependudukan (NIK)</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-slate-300 lg:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,72 +152,45 @@
                                       d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2"/>
                             </svg>
                         </div>
-                        <input id="login" name="login" type="text"
-                               value="{{ old('login') }}"
-                               class="login-input form-input bg-white/10 text-white placeholder-white/50 border-white/30 focus:bg-white/15 focus:border-blue-400 pl-11 @error('login') border-red-400 focus:ring-red-400 @enderror"
-                               placeholder="Masukkan NIK atau Email" required autofocus>
+                        <input id="nik" name="nik" type="text" maxlength="16"
+                               value="{{ old('nik') }}"
+                               class="login-input form-input bg-white/10 text-white placeholder-white/50 border-white/30 focus:bg-white/15 focus:border-blue-400 pl-11 @error('nik') border-red-400 focus:ring-red-400 @enderror"
+                               placeholder="Masukkan 16 digit NIK" required autofocus>
                     </div>
-                    @error('login')
-                        <p class="form-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
-                {{-- Password --}}
+                {{-- KK --}}
                 <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label for="password" class="login-label form-label text-white mb-0">Kata Sandi</label>
-                        <a href="{{ route('password.request') }}" class="login-label text-xs text-white font-bold mobile-text-shadow hover:text-blue-300 lg:text-slate-500 lg:hover:text-blue-600 transition-colors">
-                            Lupa Kata Sandi?
-                        </a>
-                    </div>
-                    <div class="relative" style="position: relative;">
+                    <label for="no_kk" class="login-label form-label text-white">Nomor Kartu Keluarga (KK)</label>
+                    <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-slate-300 lg:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                             </svg>
                         </div>
-                        <input id="password" name="password" type="password"
-                               class="login-input form-input bg-white/10 text-white placeholder-white/50 border-white/30 focus:bg-white/15 focus:border-blue-400 pl-11 pr-10 @error('password') border-red-400 @enderror"
-                               placeholder="Masukkan kata sandi Anda" required>
-                        <button type="button" id="toggle-password-btn" class="flex items-center text-slate-300 lg:text-slate-400 hover:text-white lg:hover:text-slate-600 focus:outline-none" style="position: absolute; right: 16px; top: 0; bottom: 0; z-index: 10; cursor: pointer;">
-                            {{-- Icon Mata Terpejam (Hide) --}}
-                            <svg id="eye-icon-hide" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>
-                            </svg>
-                            {{-- Icon Mata Terbuka (Show) --}}
-                            <svg id="eye-icon-show" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                        </button>
+                        <input id="no_kk" name="no_kk" type="text" maxlength="16"
+                               value="{{ old('no_kk') }}"
+                               class="login-input form-input bg-white/10 text-white placeholder-white/50 border-white/30 focus:bg-white/15 focus:border-blue-400 pl-11 @error('no_kk') border-red-400 @enderror"
+                               placeholder="Masukkan 16 digit Nomor KK" required>
                     </div>
-                    @error('password')
-                        <p class="form-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 {{-- Submit --}}
                 <button type="submit"
                         class="w-full btn-secondary justify-center py-3.5 text-base rounded-xl bg-slate-900 hover:bg-slate-800 text-white lg:text-white border border-slate-800/10 hover:border-slate-800/30">
-                    Masuk ke Portal
+                    Verifikasi Data Penduduk
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </button>
             </form>
 
             <div class="text-center space-y-3 pt-6 border-t border-white/20 lg:border-slate-200">
                 <p class="login-footer text-white font-medium mobile-text-shadow text-sm">
-                    Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-blue-300 lg:text-blue-600 font-bold hover:text-blue-400 lg:hover:text-blue-700 transition-colors">
-                        Daftar di sini
-                    </a>
-                </p>
-                <p class="login-help text-white font-medium mobile-text-shadow text-xs">
-                    Butuh bantuan?
-                    <a href="https://wa.me/6281234567890" class="login-help-link text-white font-bold mobile-text-shadow hover:text-blue-300 lg:hover:text-blue-600 transition-colors">
-                        Hubungi Administrator Desa
+                    Kembali ke halaman utama?
+                    <a href="{{ route('login') }}" class="text-blue-300 lg:text-blue-600 font-bold hover:text-blue-400 lg:hover:text-blue-700 transition-colors">
+                        Masuk ke Portal
                     </a>
                 </p>
             </div>
@@ -248,27 +218,5 @@
 </footer>
 
 @livewireScripts
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordInput = document.getElementById('password');
-        const toggleBtn = document.getElementById('toggle-password-btn');
-        const eyeHide = document.getElementById('eye-icon-hide');
-        const eyeShow = document.getElementById('eye-icon-show');
-
-        if (toggleBtn && passwordInput && eyeHide && eyeShow) {
-            toggleBtn.addEventListener('click', function() {
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    eyeHide.classList.add('hidden');
-                    eyeShow.classList.remove('hidden');
-                } else {
-                    passwordInput.type = 'password';
-                    eyeShow.classList.add('hidden');
-                    eyeHide.classList.remove('hidden');
-                }
-            });
-        }
-    });
-</script>
 </body>
 </html>

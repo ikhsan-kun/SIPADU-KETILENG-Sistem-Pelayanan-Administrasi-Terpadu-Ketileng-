@@ -50,14 +50,14 @@
             @csrf
             <input type="hidden" name="jenis_surat_id" value="{{ $jenisSurat->id }}">
 
-            @if($jenisSurat->kode === 'HAJATAN')
+            @if($jenisSurat->kode === 'IKH')
                 <input type="hidden" name="keperluan" id="hidden_keperluan">
-                <div class="space-y-4 bg-emerald-50/50 border border-emerald-100 rounded-xl p-5">
-                    <p class="text-sm font-semibold text-emerald-800">Detail Acara Hajatan</p>
+                <div class="space-y-4 bg-blue-50/50 border border-blue-100 rounded-xl p-5">
+                    <p class="text-sm font-semibold text-blue-800">Detail Acara Khajatan</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="form-label">Jenis Acara / Hajatan <span class="text-red-500">*</span></label>
+                            <label class="form-label">Jenis Acara / Khajatan <span class="text-red-500">*</span></label>
                             <input type="text" id="hj_acara" class="form-input" placeholder="Contoh: Tasyakuran Khitan / Pernikahan" required>
                         </div>
                         <div>
@@ -124,10 +124,13 @@
             {{-- Upload KTP --}}
             <div>
                 <label class="form-label">Upload Foto/Scan KTP <span class="text-red-500">*</span></label>
-                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-emerald-400 transition-colors">
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors relative">
                     <input type="file" name="file_ktp" id="file_ktp" accept=".jpg,.jpeg,.png,.pdf" class="hidden"
-                           onchange="showFileName(this, 'ktp-label')">
-                    <label for="file_ktp" class="cursor-pointer">
+                           onchange="previewFile(this, 'ktp-label', 'ktp-preview', 'ktp-preview-container')">
+                    <label for="file_ktp" class="cursor-pointer block">
+                        <div id="ktp-preview-container" class="hidden mb-3 mx-auto max-w-[200px] border rounded-lg overflow-hidden shadow-sm bg-slate-50">
+                            <img id="ktp-preview" class="w-full h-auto object-cover max-h-[120px] mx-auto" src="" alt="Preview KTP">
+                        </div>
                         <svg class="w-8 h-8 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                         <p id="ktp-label" class="text-sm text-slate-500">Klik untuk pilih file KTP</p>
                         <p class="text-xs text-slate-400 mt-1">JPG, PNG, PDF – Maks. 2 MB</p>
@@ -139,10 +142,13 @@
             {{-- Upload KK --}}
             <div>
                 <label class="form-label">Upload Foto/Scan Kartu Keluarga (KK) <span class="text-red-500">*</span></label>
-                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-emerald-400 transition-colors">
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors relative">
                     <input type="file" name="file_kk" id="file_kk" accept=".jpg,.jpeg,.png,.pdf" class="hidden"
-                           onchange="showFileName(this, 'kk-label')">
-                    <label for="file_kk" class="cursor-pointer">
+                           onchange="previewFile(this, 'kk-label', 'kk-preview', 'kk-preview-container')">
+                    <label for="file_kk" class="cursor-pointer block">
+                        <div id="kk-preview-container" class="hidden mb-3 mx-auto max-w-[200px] border rounded-lg overflow-hidden shadow-sm bg-slate-50">
+                            <img id="kk-preview" class="w-full h-auto object-cover max-h-[120px] mx-auto" src="" alt="Preview KK">
+                        </div>
                         <svg class="w-8 h-8 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                         <p id="kk-label" class="text-sm text-slate-500">Klik untuk pilih file KK</p>
                         <p class="text-xs text-slate-400 mt-1">JPG, PNG, PDF – Maks. 2 MB</p>
@@ -164,11 +170,32 @@
 </div>
 
 <script>
-function showFileName(input, labelId) {
+function previewFile(input, labelId, imgId, containerId) {
     const label = document.getElementById(labelId);
+    const img = document.getElementById(imgId);
+    const container = document.getElementById(containerId);
+    
     if (input.files && input.files[0]) {
-        label.textContent = '✓ ' + input.files[0].name;
-        label.classList.add('text-emerald-600', 'font-medium');
+        const file = input.files[0];
+        label.textContent = '✓ ' + file.name;
+        label.classList.add('text-blue-600', 'font-medium');
+        
+        // Cek jika file adalah gambar (JPG, JPEG, PNG)
+        if (file.type.match('image.*')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                container.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Jika PDF, sembunyikan gambar preview tapi simpan nama file terpilih
+            container.classList.add('hidden');
+            img.src = '';
+        }
+    } else {
+        container.classList.add('hidden');
+        img.src = '';
     }
 }
 </script>

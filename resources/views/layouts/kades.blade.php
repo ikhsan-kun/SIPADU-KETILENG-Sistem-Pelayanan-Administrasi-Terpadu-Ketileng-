@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/png" href="{{ asset('download.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Kepala Desa') – Desa Ketileng</title>
@@ -71,15 +72,12 @@
         {{-- Logo --}}
         <div class="p-5 border-b border-slate-800">
             <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <img src="{{ asset('download.png') }}" alt="logo" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <p class="text-white font-bold text-sm leading-none">Desa Digital</p>
-                    <p class="text-slate-500 text-xs">Governance Portal</p>
+                    <p class="text-white font-bold text-sm leading-none">SIPADU</p>
+                    <p class="text-slate-500 text-xs">Desa Ketileng</p>
                 </div>
             </div>
         </div>
@@ -121,7 +119,7 @@
             {{-- Profile Dropdown --}}
             <div class="relative" style="position: relative;">
                 <button id="profile-dropdown-btn"
-                    class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-emerald-600 transition-colors focus:outline-none">
+                    class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors focus:outline-none">
                     {{ strtoupper(substr(auth()->user()->name ?? 'K', 0, 1)) }}
                 </button>
 
@@ -132,7 +130,7 @@
                     <div class="px-4 py-2.5 border-b border-slate-50">
                         <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Nama Akun</p>
                         <p class="text-sm font-bold text-slate-800 truncate mt-0.5">{{ auth()->user()->name }}</p>
-                        <p class="text-[11px] text-emerald-600 font-semibold mt-0.5">Kepala Desa</p>
+                        <p class="text-[11px] text-blue-600 font-semibold mt-0.5">Kepala Desa</p>
                     </div>
                     <a href="{{ route('kades.profile') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,6 +177,25 @@
         <div class="p-4 md:p-8">
             @yield('content')
         </div>
+
+        {{-- Footer UHN --}}
+        <footer style="background-color: #f8f9fa; border-top: 1px solid #e2e8f0; padding: 16px 48px; flex-shrink: 0; width: 100%; position: relative; z-index: 20;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 38px; height: 38px; padding: 6px; background-color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #f1f5f9; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+                        <img src="{{ asset('uhn.png') }}" alt="UHN Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
+                        <p style="color: #1e293b; font-size: 11px; letter-spacing: 0.08em; line-height: 1; margin: 0 0 4px 0; font-weight: 700; text-transform: uppercase;">Universitas Harkat Negeri</p>
+                        <p style="color: #64748b; font-size: 9px; letter-spacing: 0.1em; line-height: 1; margin: 0; font-weight: 600; text-transform: uppercase;">Prodi Teknik Komputer</p>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center; text-align: right;">
+                    <p style="color: #1e293b; font-size: 11px; letter-spacing: 0.08em; line-height: 1; margin: 0 0 4px 0; font-weight: 700; text-transform: uppercase;">© 2026 Tugas Akhir.</p>
+                    <p style="color: #64748b; font-size: 9px; letter-spacing: 0.1em; line-height: 1; margin: 0; font-weight: 600; text-transform: uppercase;">All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
     </main>
 </div>
 

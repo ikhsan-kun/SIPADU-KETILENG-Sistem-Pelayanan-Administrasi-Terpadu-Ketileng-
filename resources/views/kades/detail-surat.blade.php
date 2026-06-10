@@ -16,7 +16,7 @@
         {{-- Kiri: Preview Dokumen --}}
         <div class="lg:col-span-2 space-y-6">
             {{-- Status Header --}}
-            <div class="card bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">
+            <div class="card bg-gradient-to-r from-blue-500 to-blue-600 text-white">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
@@ -24,11 +24,11 @@
                         </div>
                         <div>
                             <h1 class="text-xl font-bold">Surat Telah Disetujui</h1>
-                            <p class="text-emerald-100 text-sm mt-0.5">Nomor: {{ $pengajuan->no_surat }}</p>
+                            <p class="text-blue-100 text-sm mt-0.5">Nomor: {{ $pengajuan->no_surat }}</p>
                         </div>
                     </div>
                     @if($pengajuan->surat_path)
-                    <a href="{{ route('kades.download', $pengajuan) }}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-emerald-700 rounded-xl font-bold text-sm hover:bg-emerald-50 transition-colors shadow-sm">
+                    <a href="{{ route('kades.download', $pengajuan) }}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-blue-700 rounded-xl font-bold text-sm hover:bg-blue-50 transition-colors shadow-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         Download PDF
                     </a>
@@ -74,7 +74,7 @@
                                 <img src="{{ asset('storage/' . $pengajuan->qr_code_path) }}" alt="QR Code" class="w-full h-full object-contain">
                             </div>
                             @else
-                            <div class="w-24 h-24 border-2 border-dashed border-emerald-300 mx-auto flex items-center justify-center text-emerald-400 text-xs mb-2 rounded">
+                            <div class="w-24 h-24 border-2 border-dashed border-blue-300 mx-auto flex items-center justify-center text-blue-400 text-xs mb-2 rounded">
                                 QR Code
                             </div>
                             @endif
@@ -84,20 +84,7 @@
                 </div>
             </div>
 
-            {{-- Dokumen Lampiran --}}
-            @if($pengajuan->dokumen->count() > 0)
-            <div class="card">
-                <h2 class="text-base font-bold text-slate-800 mb-4">Dokumen Lampiran</h2>
-                <div class="flex flex-wrap gap-3">
-                    @foreach($pengajuan->dokumen as $dok)
-                        <a href="{{ route('admin.verifikasi.dokumen', [$pengajuan, strtolower($dok->jenis_dokumen)]) }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg hover:border-blue-400 hover:text-blue-600 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                            <span class="text-sm font-medium">{{ $dok->jenis_dokumen }}</span>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-            @endif
+
         </div>
 
         {{-- Kanan: Detail Info --}}
@@ -137,12 +124,12 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
                             <p class="text-xs text-slate-400 font-medium">Tanggal Disetujui</p>
-                            <p class="font-bold text-emerald-600 text-sm">{{ $pengajuan->approved_at ? $pengajuan->approved_at->locale('id')->isoFormat('D MMMM YYYY, HH:mm') : '-' }}</p>
+                            <p class="font-bold text-blue-600 text-sm">{{ $pengajuan->approved_at ? $pengajuan->approved_at->locale('id')->isoFormat('D MMMM YYYY, HH:mm') : '-' }}</p>
                         </div>
                     </div>
                 </div>
@@ -222,11 +209,11 @@
 
                     {{-- Step 3: Disetujui Kades --}}
                     <div class="flex items-start gap-3 relative">
-                        <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0 z-10">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 z-10">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         </div>
                         <div>
-                            <p class="font-semibold text-emerald-600 text-sm">Disetujui & Ditandatangani</p>
+                            <p class="font-semibold text-blue-600 text-sm">Disetujui & Ditandatangani</p>
                             <p class="text-xs text-slate-500">{{ $pengajuan->approved_at ? $pengajuan->approved_at->locale('id')->isoFormat('D MMM YYYY, HH:mm') : '-' }}</p>
                             <p class="text-xs text-slate-400">Oleh: {{ $pengajuan->approvedBy->name ?? '-' }}</p>
                         </div>
@@ -238,11 +225,11 @@
             @if($pengajuan->kode_verifikasi)
             <div class="card bg-slate-900 text-white">
                 <h3 class="text-sm font-bold mb-3 uppercase tracking-wider flex items-center gap-2">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     Kode Verifikasi
                 </h3>
                 <div class="bg-slate-800 rounded-lg px-4 py-3 text-center">
-                    <p class="text-lg font-mono font-bold text-emerald-400 tracking-widest">{{ $pengajuan->kode_verifikasi }}</p>
+                    <p class="text-lg font-mono font-bold text-blue-400 tracking-widest">{{ $pengajuan->kode_verifikasi }}</p>
                 </div>
                 <a href="{{ route('verifikasi.publik', $pengajuan->kode_verifikasi) }}" target="_blank" class="mt-3 inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>

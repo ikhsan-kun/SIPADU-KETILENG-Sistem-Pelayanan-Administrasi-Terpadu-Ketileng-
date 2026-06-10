@@ -24,7 +24,7 @@
                 <div>
                     <p class="text-sm text-slate-400 mb-1">Keperluan Pengajuan</p>
                     <div class="font-medium text-slate-800 bg-slate-50 p-3 rounded-lg leading-relaxed">
-                        @if($pengajuan->jenisSurat->kode === 'HAJATAN')
+                        @if($pengajuan->jenisSurat->kode === 'IKH')
                             @php
                                 $details = json_decode($pengajuan->keperluan, true);
                             @endphp
@@ -93,7 +93,7 @@
 
             {{-- Form Verifikasi --}}
             @if($pengajuan->status == 'menunggu')
-            <div class="card bg-emerald-50 border-emerald-100">
+            <div class="card bg-blue-50 border-blue-100">
                 <h2 class="text-lg font-bold text-slate-800 mb-4">Aksi Verifikasi</h2>
                 <form action="{{ route('admin.verifikasi.proses', $pengajuan) }}" method="POST" class="space-y-4">
                     @csrf
