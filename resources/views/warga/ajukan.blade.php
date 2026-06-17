@@ -158,9 +158,9 @@
             {{-- Upload KTP --}}
             <div>
                 <label class="form-label">Upload Foto/Scan KTP <span class="text-red-500">*</span></label>
-                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors relative">
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors relative" id="ktp-dropzone">
                     <input type="file" name="file_ktp" id="file_ktp" accept=".jpg,.jpeg,.png,.pdf" class="hidden"
-                           onchange="previewFile(this, 'ktp-label', 'ktp-preview', 'ktp-preview-container')">
+                           onchange="previewFile(this, 'ktp-label', 'ktp-preview', 'ktp-preview-container', 'ktp-error', 'ktp-dropzone')">
                     <label for="file_ktp" class="cursor-pointer block">
                         <div id="ktp-preview-container" class="hidden mb-3 mx-auto max-w-[200px] border rounded-lg overflow-hidden shadow-sm bg-slate-50">
                             <img id="ktp-preview" class="w-full h-auto object-cover max-h-[120px] mx-auto" src="" alt="Preview KTP">
@@ -170,15 +170,20 @@
                         <p class="text-xs text-slate-400 mt-1">JPG, PNG, PDF – Maks. 2 MB</p>
                     </label>
                 </div>
+                {{-- Pesan error ukuran file KTP --}}
+                <div id="ktp-error" class="hidden mt-2 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-2.5 rounded-lg">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                    <span>Ukuran file KTP terlalu besar! Maksimal <strong>2 MB</strong>. Silakan pilih file yang lebih kecil.</span>
+                </div>
                 @error('file_ktp')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
             {{-- Upload KK --}}
             <div>
                 <label class="form-label">Upload Foto/Scan Kartu Keluarga (KK) <span class="text-red-500">*</span></label>
-                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors relative">
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors relative" id="kk-dropzone">
                     <input type="file" name="file_kk" id="file_kk" accept=".jpg,.jpeg,.png,.pdf" class="hidden"
-                           onchange="previewFile(this, 'kk-label', 'kk-preview', 'kk-preview-container')">
+                           onchange="previewFile(this, 'kk-label', 'kk-preview', 'kk-preview-container', 'kk-error', 'kk-dropzone')">
                     <label for="file_kk" class="cursor-pointer block">
                         <div id="kk-preview-container" class="hidden mb-3 mx-auto max-w-[200px] border rounded-lg overflow-hidden shadow-sm bg-slate-50">
                             <img id="kk-preview" class="w-full h-auto object-cover max-h-[120px] mx-auto" src="" alt="Preview KK">
@@ -187,6 +192,11 @@
                         <p id="kk-label" class="text-sm text-slate-500">Klik untuk pilih file KK</p>
                         <p class="text-xs text-slate-400 mt-1">JPG, PNG, PDF – Maks. 2 MB</p>
                     </label>
+                </div>
+                {{-- Pesan error ukuran file KK --}}
+                <div id="kk-error" class="hidden mt-2 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-2.5 rounded-lg">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                    <span>Ukuran file KK terlalu besar! Maksimal <strong>2 MB</strong>. Silakan pilih file yang lebih kecil.</span>
                 </div>
                 @error('file_kk')<p class="form-error">{{ $message }}</p>@enderror
             </div>
@@ -204,17 +214,42 @@
 </div>
 
 <script>
-function previewFile(input, labelId, imgId, containerId) {
-    const label = document.getElementById(labelId);
-    const img = document.getElementById(imgId);
+const MAX_SIZE = 2 * 1024 * 1024; // 2 MB dalam bytes
+
+function previewFile(input, labelId, imgId, containerId, errorId, dropzoneId) {
+    const label     = document.getElementById(labelId);
+    const img       = document.getElementById(imgId);
     const container = document.getElementById(containerId);
-    
+    const errorDiv  = document.getElementById(errorId);
+    const dropzone  = document.getElementById(dropzoneId);
+
     if (input.files && input.files[0]) {
         const file = input.files[0];
+
+        // ✅ Validasi ukuran file — tolak jika lebih dari 2 MB
+        if (file.size > MAX_SIZE) {
+            // Tampilkan pesan error merah
+            errorDiv.classList.remove('hidden');
+            // Beri border merah pada area upload
+            dropzone.classList.add('border-red-400', 'bg-red-50');
+            dropzone.classList.remove('border-slate-200');
+            // Reset input agar file tidak terkirim
+            input.value = '';
+            label.textContent = 'Klik untuk pilih file';
+            label.classList.remove('text-blue-600', 'font-medium');
+            container.classList.add('hidden');
+            img.src = '';
+            return; // Hentikan proses — jangan preview
+        }
+
+        // ✅ Ukuran valid — sembunyikan error dan lanjutkan preview
+        errorDiv.classList.add('hidden');
+        dropzone.classList.remove('border-red-400', 'bg-red-50');
+        dropzone.classList.add('border-slate-200');
+
         label.textContent = '✓ ' + file.name;
         label.classList.add('text-blue-600', 'font-medium');
-        
-        // Cek jika file adalah gambar (JPG, JPEG, PNG)
+
         if (file.type.match('image.*')) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -223,7 +258,6 @@ function previewFile(input, labelId, imgId, containerId) {
             };
             reader.readAsDataURL(file);
         } else {
-            // Jika PDF, sembunyikan gambar preview tapi simpan nama file terpilih
             container.classList.add('hidden');
             img.src = '';
         }
@@ -232,5 +266,30 @@ function previewFile(input, labelId, imgId, containerId) {
         img.src = '';
     }
 }
+
+// ✅ Validasi tambahan saat submit — cegah pengiriman jika masih ada error
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form[action*="ajukan"]');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            const ktpInput = document.getElementById('file_ktp');
+            const kkInput  = document.getElementById('file_kk');
+            let hasError   = false;
+
+            if (ktpInput && ktpInput.files[0] && ktpInput.files[0].size > MAX_SIZE) {
+                document.getElementById('ktp-error').classList.remove('hidden');
+                hasError = true;
+            }
+            if (kkInput && kkInput.files[0] && kkInput.files[0].size > MAX_SIZE) {
+                document.getElementById('kk-error').classList.remove('hidden');
+                hasError = true;
+            }
+
+            if (hasError) {
+                e.preventDefault(); // Blokir pengiriman form
+            }
+        });
+    }
+});
 </script>
 @endsection

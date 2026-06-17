@@ -95,15 +95,29 @@
 
     {{-- RIGHT: Form Login --}}
     <div class="flex-1 flex items-center justify-center p-6 sm:p-12 md:p-16 bg-slate-950 lg:bg-white relative overflow-hidden">
-        {{-- Mobile Background Image (Visible on mobile only, hidden on desktop, low opacity) --}}
-        <div class="absolute inset-0 bg-cover bg-center lg:hidden z-0 opacity-15 scale-105" 
+        {{-- Mobile Background Image - tampil penuh dengan opacity cukup agar terlihat --}}
+        <div class="absolute inset-0 bg-cover bg-center lg:hidden z-0 scale-105" 
              style="background-image: url('{{ asset('images/bg_desa.png') }}');">
         </div>
-        {{-- Very dark overlay - stronger at bottom for maximum readability --}}
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/92 to-slate-950 lg:hidden z-0"></div>
+        {{-- Overlay lebih ringan agar gambar desa tetap terlihat namun form tetap terbaca --}}
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/55 via-slate-900/65 to-slate-950/80 lg:hidden z-0"></div>
 
-        {{-- Form Container --}}
-        <div class="w-full max-w-md space-y-8 relative z-10 p-0 bg-transparent border-none shadow-none">
+        {{-- Form Container: pakai glassmorphic card di mobile, transparan di desktop --}}
+        <div class="w-full max-w-md space-y-6 relative z-10 lg:p-0 lg:bg-transparent lg:border-none lg:shadow-none"
+             style="background: rgba(15,23,42,0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,0.10); border-radius: 20px; padding: 28px 24px;"
+             id="login-card-wrapper">
+        <style>
+            @media (min-width: 1024px) {
+                #login-card-wrapper {
+                    background: transparent !important;
+                    backdrop-filter: none !important;
+                    -webkit-backdrop-filter: none !important;
+                    border: none !important;
+                    border-radius: 0 !important;
+                    padding: 0 !important;
+                }
+            }
+        </style>
             
             {{-- Mobile logo --}}
             <div class="lg:hidden flex items-center gap-2 mb-6">
@@ -219,7 +233,7 @@
                 </p>
                 <p class="login-help text-white font-medium mobile-text-shadow text-xs">
                     Butuh bantuan?
-                    <a href="https://wa.me/6281234567890" class="login-help-link text-white font-bold mobile-text-shadow hover:text-blue-300 lg:hover:text-blue-600 transition-colors">
+                    <a href="https://wa.me/62895385213235" class="login-help-link text-white font-bold mobile-text-shadow hover:text-blue-300 lg:hover:text-blue-600 transition-colors">
                         Hubungi Administrator Desa
                     </a>
                 </p>

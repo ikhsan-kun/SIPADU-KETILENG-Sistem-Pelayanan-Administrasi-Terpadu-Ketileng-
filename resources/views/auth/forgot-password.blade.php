@@ -91,31 +91,26 @@
     </div>
 
     {{-- RIGHT: Form Lupa Password --}}
-    <div class="flex-1 flex items-center justify-center p-6 sm:p-12 md:p-16 bg-slate-950 lg:bg-white relative overflow-hidden">
-        {{-- Mobile Background --}}
-        <div class="absolute inset-0 bg-cover bg-center lg:hidden z-0 opacity-15 scale-105" 
-             style="background-image: url('{{ asset('images/bg_desa.png') }}');">
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/92 to-slate-950 lg:hidden z-0"></div>
+    <div class="flex-1 flex items-center justify-center p-6 sm:p-12 md:p-16 bg-white relative overflow-hidden">
 
         {{-- Form Container --}}
-        <div class="w-full max-w-md space-y-8 relative z-10 p-0 bg-transparent border-none shadow-none">
+        <div class="w-full max-w-md space-y-8 relative z-10">
             
             {{-- Mobile logo --}}
             <div class="lg:hidden flex items-center gap-2 mb-6">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center">
                     <img src="{{ asset('download.png') }}" alt="logo" class="w-full h-full object-contain">
                 </div>
-                <span class="font-bold text-white">SIPADU Desa Ketileng</span>
+                <span class="font-bold text-slate-800">SIPADU Desa Ketileng</span>
             </div>
 
             <div class="space-y-3">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 lg:bg-blue-50 border border-white/20 lg:border-blue-100 backdrop-blur-md lg:backdrop-blur-none shadow-sm mb-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-blue-400 lg:bg-blue-600 animate-pulse"></span>
-                    <p class="text-[10px] font-bold text-white lg:text-blue-600 uppercase tracking-widest mobile-text-shadow lg:!shadow-none">Pemulihan Akun Warga</p>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 shadow-sm mb-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                    <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Pemulihan Akun Warga</p>
                 </div>
-                <h2 class="text-3xl lg:text-4xl font-extrabold text-white lg:text-transparent lg:bg-clip-text lg:bg-gradient-to-br lg:from-slate-900 lg:to-blue-800 tracking-tight mobile-text-shadow lg:!shadow-none">Lupa Kata Sandi?</h2>
-                <p class="text-white/90 lg:text-slate-500 text-sm leading-relaxed mobile-text-shadow lg:!shadow-none font-medium">
+                <h2 class="text-3xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-blue-800 tracking-tight">Lupa Kata Sandi?</h2>
+                <p class="text-slate-500 text-sm leading-relaxed font-medium">
                     Silakan masukkan NIK dan Nomor KK Anda yang terdaftar pada database kependudukan Desa Ketileng untuk memverifikasi akun Anda.
                 </p>
             </div>
@@ -144,34 +139,34 @@
 
                 {{-- NIK --}}
                 <div>
-                    <label for="nik" class="login-label form-label text-white">Nomor Induk Kependudukan (NIK)</label>
+                    <label for="nik" class="form-label">Nomor Induk Kependudukan (NIK)</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 text-slate-300 lg:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2"/>
                             </svg>
                         </div>
                         <input id="nik" name="nik" type="text" maxlength="16"
                                value="{{ old('nik') }}"
-                               class="login-input form-input bg-white/10 text-white placeholder-white/50 border-white/30 focus:bg-white/15 focus:border-blue-400 pl-11 @error('nik') border-red-400 focus:ring-red-400 @enderror"
+                               class="form-input pl-11 @error('nik') border-red-400 focus:ring-red-400 @enderror"
                                placeholder="Masukkan 16 digit NIK" required autofocus>
                     </div>
                 </div>
 
                 {{-- KK --}}
                 <div>
-                    <label for="no_kk" class="login-label form-label text-white">Nomor Kartu Keluarga (KK)</label>
+                    <label for="no_kk" class="form-label">Nomor Kartu Keluarga (KK)</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 text-slate-300 lg:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                             </svg>
                         </div>
                         <input id="no_kk" name="no_kk" type="text" maxlength="16"
                                value="{{ old('no_kk') }}"
-                               class="login-input form-input bg-white/10 text-white placeholder-white/50 border-white/30 focus:bg-white/15 focus:border-blue-400 pl-11 @error('no_kk') border-red-400 @enderror"
+                               class="form-input pl-11 @error('no_kk') border-red-400 @enderror"
                                placeholder="Masukkan 16 digit Nomor KK" required>
                     </div>
                 </div>
@@ -186,10 +181,10 @@
                 </button>
             </form>
 
-            <div class="text-center space-y-3 pt-6 border-t border-white/20 lg:border-slate-200">
-                <p class="login-footer text-white font-medium mobile-text-shadow text-sm">
+            <div class="text-center space-y-3 pt-6 border-t border-slate-200">
+                <p class="text-slate-500 font-medium text-sm">
                     Kembali ke halaman utama?
-                    <a href="{{ route('login') }}" class="text-blue-300 lg:text-blue-600 font-bold hover:text-blue-400 lg:hover:text-blue-700 transition-colors">
+                    <a href="{{ route('login') }}" class="text-blue-600 font-bold hover:text-blue-700 transition-colors">
                         Masuk ke Portal
                     </a>
                 </p>

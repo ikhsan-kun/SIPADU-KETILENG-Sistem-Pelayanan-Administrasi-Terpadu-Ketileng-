@@ -108,13 +108,15 @@ Route::get('/verifikasi/{kode}', [VerifikasiPublikController::class, 'show'])
 // ── AUTH ───────────────────────────────────────────────────────────────────
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+    // throttle:5,1 → Maksimal 5 percobaan login per 1 menit per IP (anti brute force)
+    Route::post('/login', [LoginController::class, 'login'])->name('login.post')->middleware('throttle:5,1');
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
     
     // Reset Password Mandiri
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
-    Route::post('/forgot-password', [ForgotPasswordController::class, 'verifyNikKk'])->name('password.verify');
+    // throttle:5,1 → Maksimal 5 percobaan verifikasi NIK+KK per 1 menit per IP
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'verifyNikKk'])->name('password.verify')->middleware('throttle:5,1');
     Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 });
@@ -173,12 +175,13 @@ Route::middleware(['auth', 'role:kades'])->prefix('kades')->name('kades.')->grou
 });
 
 // Route sementara untuk membersihkan data testing
-Route::get('/clear-test-data', function () {
-    try {
-        \App\Models\PengajuanSurat::query()->delete();
-        return response('Semua data surat pengujian dan dokumen persyaratannya berhasil dibersihkan! Silakan kembali dan lakukan testing dari nomor 001.');
-    } catch (\Exception $e) {
-        return response('Gagal menghapus data: ' . $e->getMessage(), 500);
-    }
-});
+// ⚠️ DINONAKTIFKAN - Aktifkan kembali hanya jika perlu reset data testing
+// Route::get('/clear-test-data', function () {
+//     try {
+//         \App\Models\PengajuanSurat::query()->delete();
+//         return response('Semua data surat pengujian dan dokumen persyaratannya berhasil dibersihkan! Silakan kembali dan lakukan testing dari nomor 001.');
+//     } catch (\Exception $e) {
+//         return response('Gagal menghapus data: ' . $e->getMessage(), 500);
+//     }
+// });
 

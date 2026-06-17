@@ -166,7 +166,7 @@
             <button type="button" onclick="closeApproveModal()" class="flex-1 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl transition-all duration-200">
                 Batal
             </button>
-            <button type="button" onclick="submitApproveForm()" class="flex-1 py-2.5 font-bold text-xs rounded-xl transition-all duration-200 shadow-lg shadow-blue-100 flex items-center justify-center gap-1.5" style="background-color: #10b981; color: #ffffff !important;">
+            <button type="button" onclick="submitApproveForm()" class="flex-1 py-2.5 font-bold text-xs rounded-xl transition-all duration-200 shadow-lg shadow-blue-100 flex items-center justify-center gap-1.5" style="background-color: #3b82f6; color: #ffffff !important;">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
