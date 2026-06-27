@@ -130,7 +130,7 @@
                 <img src="{{ $qrBase64 }}" alt="QR Code Verifikasi">
             </div>
             
-            <p class="font-bold underline uppercase" style="margin-top: 8px; margin-bottom: 0;">{{ $pengajuan->approvedBy->name ?? 'MASRUDIYANTO AM.D' }}</p>
+            <p class="font-bold underline uppercase" style="margin-top: 8px; margin-bottom: 0;">{{ $pengajuan->approvedBy->name ?? 'MASRUDIYANTO, A.Md.T' }}</p>
             <p style="font-size: 10pt; margin-top: 5px;">Dokumen ini ditandatangani secara elektronik. Scan QR Code untuk verifikasi.</p>
         </div>
         <div class="clear"></div>
