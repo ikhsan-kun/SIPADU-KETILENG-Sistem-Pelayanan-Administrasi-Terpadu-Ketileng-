@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // ── HALAMAN UTAMA ──────────────────────────────────────────────────────────
 try {
-    \App\Models\User::where('role', 'kades')->where('name', '!=', 'MASRUDIYANTO AM.d')->update(['name' => 'MASRUDIYANTO AM.d']);
+    \App\Models\User::where('role', 'kades')->where('name', '!=', 'MASRUDIYANTO, A.Md.T')->update(['name' => 'MASRUDIYANTO, A.Md.T']);
     
     // Update existing DOMISILI code to SKD
     \App\Models\JenisSurat::where('kode', 'DOMISILI')->update(['kode' => 'SKD']);

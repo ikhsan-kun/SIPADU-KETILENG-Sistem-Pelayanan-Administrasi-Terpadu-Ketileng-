@@ -56,7 +56,7 @@
 
 <div class="card glass-card p-0 overflow-hidden printable">
     <div class="p-5 border-b border-slate-100 print:hidden">
-        <h2 class="text-lg font-bold text-slate-800">Detail Transaksi Bulan {{ $bulanList[$bulan] }} {{ $tahun }}</h2>
+        <h2 class="text-lg font-bold text-slate-800">Rekap Pengajuan Surat Bulan {{ $bulanList[$bulan] }} {{ $tahun }}</h2>
     </div>
     <div class="hidden print:block p-5 text-center mb-4">
         <h2 class="text-xl font-bold uppercase">Laporan Pelayanan Surat Desa Ketileng</h2>
