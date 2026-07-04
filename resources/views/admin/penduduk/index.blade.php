@@ -53,70 +53,7 @@
 </div>
 @endif
 
-<div class="card p-0 overflow-hidden">
-    <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-        <form method="GET" action="{{ route('admin.penduduk.index') }}" class="flex items-center gap-2">
-            <div class="relative w-72">
-                <input type="text" name="search" value="{{ $search }}" placeholder="Cari NIK, Nama, Dusun..." class="form-input pl-9 pr-8 py-2 text-sm">
-                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                @if($search)
-                    <a href="{{ route('admin.penduduk.index') }}" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></a>
-                @endif
-            </div>
-            <button type="submit" style="background-color: #2563eb; color: #ffffff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: background-color 0.2s;">
-                <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                Cari
-            </button>
-        </form>
-    </div>
-    <div class="overflow-x-auto">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>NIK</th>
-                    <th>Nama Lengkap</th>
-                    <th>L/P</th>
-                    <th>Usia</th>
-                    <th>Desa / Kecamatan</th>
-                    <th class="text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($penduduk as $p)
-                <tr>
-                    <td class="font-medium text-slate-800">{{ $p->nik }}</td>
-                    <td class="font-semibold text-slate-800">{{ $p->nama }}</td>
-                    <td class="text-slate-600">{{ substr($p->jenis_kelamin, 0, 1) }}</td>
-                    <td class="text-slate-600">{{ $p->umur }} thn</td>
-                    <td class="text-slate-600">{{ $p->desa }}, Kec. {{ $p->kecamatan }} (RT {{ $p->rt ?? '-' }}/RW {{ $p->rw ?? '-' }})</td>
-                    <td>
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('admin.penduduk.edit', $p) }}" class="p-1.5 text-slate-400 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                            </a>
-                            <form action="{{ route('admin.penduduk.destroy', $p) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus data penduduk ini?');">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600 bg-slate-100 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center py-12 text-slate-500">
-                        Tidak ada data penduduk yang ditemukan.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    <div class="p-4 border-t border-slate-100">
-        {{ $penduduk->links() }}
-    </div>
-</div>
+<livewire:penduduk-table />
 
 {{-- ══════════════════════════════════════════════════════════════════════════ --}}
 {{-- MODAL IMPORT EXCEL                                                       --}}

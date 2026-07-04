@@ -176,30 +176,31 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                @php $notif = \App\Models\PengajuanSurat::where('status','menunggu')->count(); @endphp
-                <div class="relative">
-                    <a href="{{ route('admin.verifikasi.index') }}" class="p-2 text-slate-400 hover:text-slate-600 relative block" title="Verifikasi Berkas Masuk">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                        @if($notif > 0)<span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">{{ $notif }}</span>@endif
-                    </a>
-                </div>
+                {{-- Lonceng Notifikasi Real-time (Livewire) --}}
+                <livewire:notification-bell />
                 <div class="relative" style="position: relative; display: flex; align-items: center; gap: 12px;">
                     <div style="text-align: right; line-height: 1.3;" class="hidden sm:block">
                         <p style="font-size: 12px; font-weight: 700; color: #334155; margin: 0;">{{ explode(' ', auth()->user()->name)[0] }}</p>
                         <p style="font-size: 9px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Administrator</p>
                     </div>
-                    <button id="profile-dropdown-btn" class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors focus:outline-none">
+                    <button type="button" 
+                            onclick="event.stopPropagation(); const m = document.getElementById('profile-dropdown-menu'); m.style.display = (m.style.display === 'block' ? 'none' : 'block');" 
+                            class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors focus:outline-none cursor-pointer">
                         {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                     </button>
                     
                     {{-- Dropdown Card --}}
-                    <div id="profile-dropdown-menu" class="hidden absolute mt-2 w-52 bg-white border border-slate-100 rounded-xl shadow-lg py-2 z-50 animate-fade-in-down" style="right: 0; z-index: 110; position: absolute; top: 100%;">
+                    <div id="profile-dropdown-menu" 
+                         style="display: none; position: absolute; right: 0; top: 100%; margin-top: 8px; width: 210px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 8px 0; z-index: 300;"
+                         onclick="event.stopPropagation();">
                         <div class="px-4 py-2.5 border-b border-slate-50 text-left">
                             <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Nama Akun</p>
                             <p class="text-sm font-bold text-slate-800 truncate mt-0.5">{{ auth()->user()->name }}</p>
                             <p class="text-[11px] text-slate-500 font-medium truncate mt-0.5">Administrator Desa</p>
                         </div>
-                        <button type="button" id="open-password-modal-btn" class="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors focus:outline-none">
+                        <button type="button" id="open-password-modal-btn" 
+                                onclick="document.getElementById('profile-dropdown-menu').style.display='none'; document.getElementById('password-modal').classList.remove('hidden');"
+                                class="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors focus:outline-none">
                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                             Ganti Password
                         </button>
@@ -223,7 +224,7 @@
         <div class="mx-4 md:mx-8 mt-4"><div class="alert-error">{{ session('error') }}</div></div>
         @endif
 
-        <main class="flex-1 p-4 md:p-8">@yield('content')</main>
+        <main id="page-content" class="flex-1 p-4 md:p-8">@yield('content')</main>
 
         {{-- Footer UHN --}}
         <footer style="background-color: #f8f9fa; border-top: 1px solid #e2e8f0; padding: 16px 48px; flex-shrink: 0; width: 100%; position: relative; z-index: 20;">
@@ -246,7 +247,9 @@
     </div>
 </div>
 {{-- ── MODAL GANTI PASSWORD ADMIN ── --}}
-<div id="password-modal" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4" style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); transition: opacity 0.25s ease;">
+<div id="password-modal" 
+     onclick="if(event.target === this) this.classList.add('hidden');"
+     class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4" style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); transition: opacity 0.25s ease;">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all animate-fade-in-down">
         {{-- Header Modal --}}
         <div class="px-6 py-4.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
@@ -254,7 +257,10 @@
                 <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 Ganti Password Admin
             </h3>
-            <button type="button" id="close-password-modal-btn" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors">
+            <button type="button" 
+                    onclick="document.getElementById('password-modal').classList.add('hidden');" 
+                    id="close-password-modal-btn" 
+                    class="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
@@ -279,7 +285,10 @@
             </div>
 
             <div class="border-t border-slate-100 pt-4 mt-6 flex items-center justify-end gap-2.5">
-                <button type="button" id="cancel-password-modal-btn" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-colors">
+                <button type="button" 
+                        onclick="document.getElementById('password-modal').classList.add('hidden');" 
+                        id="cancel-password-modal-btn" 
+                        class="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-colors cursor-pointer">
                     Batal
                 </button>
                 <button type="submit" class="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-1.5">
@@ -309,52 +318,49 @@
         }
 
         // ── PROFILE DROPDOWN MENU INTERACTION ──
-        const profileBtn = document.getElementById('profile-dropdown-btn');
-        const profileMenu = document.getElementById('profile-dropdown-menu');
-
-        if (profileBtn && profileMenu) {
-            profileBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileMenu.classList.toggle('hidden');
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!profileMenu.contains(e.target) && e.target !== profileBtn) {
-                    profileMenu.classList.add('hidden');
-                }
-            });
-        }
-
-        // ── PASSWORD MODAL INTERACTION ──
-        const openModalBtn = document.getElementById('open-password-modal-btn');
-        const closeModalBtn = document.getElementById('close-password-modal-btn');
-        const cancelModalBtn = document.getElementById('cancel-password-modal-btn');
-        const modal = document.getElementById('password-modal');
-
-        if (openModalBtn && modal) {
-            openModalBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                // Sembunyikan dropdown dulu
-                profileMenu.classList.add('hidden');
-                // Tampilkan modal
-                modal.classList.remove('hidden');
-            });
-
-            function closeModal() {
-                modal.classList.add('hidden');
+        document.addEventListener('click', function() {
+            const profileMenu = document.getElementById('profile-dropdown-menu');
+            if (profileMenu) {
+                profileMenu.style.display = 'none';
             }
+        });
 
-            if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-            if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+        // ── AUTO-DISMISS ALERT NOTIFICATIONS ──
+        const autoDismissAlerts = () => {
+            const alerts = document.querySelectorAll('.alert-success, .alert-error, [class*="alert-"]');
+            alerts.forEach(alert => {
+                if (alert.dataset.autoDismissed) return;
+                alert.dataset.autoDismissed = "true";
 
-            // Tutup jika mengklik area gelap backdrop modal
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    closeModal();
-                }
+                alert.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-8px)';
+                    alert.style.maxHeight = '0px';
+                    alert.style.marginTop = '0px';
+                    alert.style.marginBottom = '0px';
+                    alert.style.paddingTop = '0px';
+                    alert.style.paddingBottom = '0px';
+                    alert.style.overflow = 'hidden';
+
+                    setTimeout(() => {
+                        const parent = alert.parentElement;
+                        alert.remove();
+                        if (parent && parent.children.length === 0 && parent.classList.contains('mx-4')) {
+                            parent.remove();
+                        }
+                    }, 500);
+                }, 3500);
             });
-        }
+        };
+
+        autoDismissAlerts();
+
+        const alertObserver = new MutationObserver(() => autoDismissAlerts());
+        alertObserver.observe(document.body, { childList: true, subtree: true });
     });
 </script>
+@include('partials.fcm-script')
 </body>
 </html>

@@ -17,17 +17,7 @@ class PendudukController extends Controller
 {
     public function index(Request $request)
     {
-        $search   = $request->get('search', '');
-        $penduduk = Penduduk::when($search, function ($q) use ($search) {
-                        $q->where('nama', 'like', "%{$search}%")
-                          ->orWhere('nik', 'like', "%{$search}%")
-                          ->orWhere('desa', 'like', "%{$search}%");
-                    })
-                    ->latest()
-                    ->paginate(10)
-                    ->withQueryString();
-
-        return view('admin.penduduk.index', compact('penduduk', 'search'));
+        return view('admin.penduduk.index');
     }
 
     public function create()

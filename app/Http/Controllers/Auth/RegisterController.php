@@ -101,6 +101,7 @@ class RegisterController extends Controller
         Auth::login($user);
 
         return redirect()->route('warga.dashboard')
-            ->with('success', 'Selamat! Akun Anda berhasil dibuat. Selamat datang, ' . $penduduk->nama . '!');
+            ->with('success', 'Selamat! Akun Anda berhasil dibuat. Selamat datang, ' . $penduduk->nama . '!')
+            ->with('just_registered', true);
     }
 }

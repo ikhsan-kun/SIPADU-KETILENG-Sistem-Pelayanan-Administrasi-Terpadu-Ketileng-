@@ -122,6 +122,42 @@ Route::middleware('guest')->group(function () {
 });
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
+Route::middleware('auth')->post('/save-fcm-token', function (\Illuminate\Http\Request $request) {
+    $request->validate(['token' => 'required|string']);
+    try {
+        if (!\Illuminate\Support\Facades\Schema::hasColumn('users', 'fcm_token')) {
+            \Illuminate\Support\Facades\Schema::table('users', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->text('fcm_token')->nullable()->after('remember_token');
+            });
+        }
+        auth()->user()->update(['fcm_token' => $request->token]);
+        return response()->json(['success' => true, 'message' => 'FCM Token saved successfully.']);
+    } catch (\Exception $e) {
+        \Illuminate\Support\Facades\Log::error('Save FCM Token error: ' . $e->getMessage());
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+    }
+})->name('save-fcm-token');
+
+Route::middleware('auth')->get('/test-notif', function () {
+    $user = auth()->user();
+    
+    $targetUrl = match($user->role) {
+        'admin' => route('admin.verifikasi.index'),
+        'kades' => route('kades.dashboard'),
+        default => route('warga.status'),
+    };
+
+    \App\Models\Notification::kirim(
+        $user->id,
+        'Uji Coba Notifikasi SIPADU',
+        'Notifikasi real-time & FCM berhasil dikirim pada pukul ' . date('H:i:s') . ' WIB.',
+        'check-circle',
+        'green',
+        $targetUrl
+    );
+    return response("<h3>✅ Notifikasi Uji Coba Berhasil Dikirim ke " . e($user->name) . "!</h3><p>Buka/kembali ke tab dashboard Anda untuk melihat badge lonceng, mendengarkan bunyi, dan mengklik item notifikasinya.</p><br><a href='" . e($targetUrl) . "'>← Kembali ke Dashboard</a>");
+})->name('test-notif');
+
 // ── WARGA ──────────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {
     Route::get('/dashboard', [WargaDashboard::class, 'index'])->name('dashboard');

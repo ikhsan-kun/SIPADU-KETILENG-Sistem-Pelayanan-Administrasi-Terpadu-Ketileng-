@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Warga;
 use App\Http\Controllers\Controller;
 use App\Models\DokumenPersyaratan;
 use App\Models\JenisSurat;
+use App\Models\Notification;
 use App\Models\Penduduk;
 use App\Models\PengajuanSurat;
 use Illuminate\Http\Request;
@@ -79,6 +80,16 @@ class PengajuanController extends Controller
                 ]);
             }
         }
+
+        // Kirim notifikasi ke semua Admin
+        Notification::kirimKeRole(
+            role: 'admin',
+            title: 'Pengajuan Surat Baru Masuk',
+            message: $penduduk->nama . ' mengajukan ' . $jenisSurat->nama . '. Segera lakukan verifikasi berkas.',
+            icon: 'document',
+            color: 'blue',
+            url: route('admin.verifikasi.show', $pengajuan)
+        );
 
         return redirect()->route('warga.status')->with('success', 'Pengajuan surat berhasil dikirim! Silakan tunggu verifikasi dari perangkat desa.');
     }

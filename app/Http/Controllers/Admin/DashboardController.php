@@ -45,8 +45,13 @@ class DashboardController extends Controller
                 ->count(),
         ];
 
+        $registrasi_baru = User::query()->where('role', 'warga')
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', compact(
-            'stats', 'penduduk_terbaru', 'verifikasi_pending', 'arsip_surat', 'bulan_ini'
+            'stats', 'penduduk_terbaru', 'verifikasi_pending', 'arsip_surat', 'bulan_ini', 'registrasi_baru'
         ));
     }
 

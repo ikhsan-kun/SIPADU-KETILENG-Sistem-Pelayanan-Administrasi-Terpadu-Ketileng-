@@ -105,4 +105,46 @@
         </div>
     </div>
 </div>
+
+@if(session('just_registered'))
+{{-- Modal Notifikasi & Validasi Registrasi --}}
+<div id="register-success-modal" style="position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 16px; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);">
+    <div class="card glass-card" style="width: 100%; max-width: 500px; padding: 28px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center; border: 1px solid rgba(255, 255, 255, 0.8);">
+        {{-- Success Checkmark Icon --}}
+        <div style="width: 64px; height: 64px; background-color: #ecfdf5; border: 1px solid #d1fae5; border-radius: 50%; color: #10b981; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);">
+            <svg style="width: 32px; height: 32px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </div>
+
+        <h3 style="font-size: 20px; font-weight: 800; color: #1e293b; margin: 0 0 8px 0; letter-spacing: -0.01em;">Pendaftaran Berhasil!</h3>
+        <p style="font-size: 13px; color: #64748b; margin: 0 0 24px 0; font-weight: 500;">Proses validasi dan registrasi akun warga telah selesai.</p>
+
+        {{-- Verification details --}}
+        <div style="text-align: left; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="color: #3b82f6; flex-shrink: 0; margin-top: 2px;">
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <div>
+                    <h4 style="font-size: 13px; font-weight: 700; color: #334155; margin: 0 0 2px 0;">1. Validasi Data Kependudukan</h4>
+                    <p style="font-size: 11.5px; color: #64748b; margin: 0; line-height: 1.4;">NIK ({{ auth()->user()->nik }}), No. KK, dan Tanggal Lahir berhasil dicocokkan & divalidasi dengan database warga Desa Ketileng.</p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="color: #10b981; flex-shrink: 0; margin-top: 2px;">
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                </div>
+                <div>
+                    <h4 style="font-size: 13px; font-weight: 700; color: #334155; margin: 0 0 2px 0;">2. Notifikasi Registrasi</h4>
+                    <p style="font-size: 11.5px; color: #64748b; margin: 0; line-height: 1.4;">Notifikasi pendaftaran akun warga baru telah dikirimkan & tercatat di Dashboard Admin Desa.</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="document.getElementById('register-success-modal').style.display='none'" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: #ffffff; font-weight: 700; font-size: 14px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); transition: opacity 0.2s;">
+            Masuk Ke Dashboard
+        </button>
+    </div>
+</div>
+@endif
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\PengajuanSurat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,9 +92,33 @@ class VerifikasiController extends Controller
             'verified_at'   => now(),
         ]);
 
-        $pesan = $request->aksi === 'diproses'
-            ? 'Berkas berhasil diverifikasi dan diteruskan ke Kepala Desa.'
-            : 'Berkas berhasil ditolak.';
+        // Hapus notifikasi masuk untuk Admin terkait surat ini agar langsung hilang dari lonceng
+        Notification::where('url', route('admin.verifikasi.show', $pengajuan))->delete();
+
+        $pengajuan->load('penduduk', 'jenisSurat');
+
+        if ($request->aksi === 'diproses') {
+            // Notifikasi ke Kades: ada surat baru menunggu persetujuan TTE
+            Notification::kirimKeRole(
+                role: 'kades',
+                title: 'Surat Siap Ditandatangani',
+                message: $pengajuan->penduduk->nama . ' – ' . $pengajuan->jenisSurat->nama . ' telah diverifikasi Admin dan menunggu persetujuan Anda.',
+                icon: 'document',
+                color: 'yellow',
+                url: route('kades.review', $pengajuan)
+            );
+            $pesan = 'Berkas berhasil diverifikasi dan diteruskan ke Kepala Desa.';
+        } else {
+            // Notifikasi ke Warga: berkas ditolak oleh Admin
+            Notification::kirim(
+                userId: $pengajuan->user_id,
+                title: 'Pengajuan Surat Ditolak',
+                message: $pengajuan->jenisSurat->nama . ' Anda ditolak oleh Admin Desa. Silakan hubungi kantor desa untuk informasi lebih lanjut.',
+                icon: 'x',
+                color: 'red'
+            );
+            $pesan = 'Berkas berhasil ditolak.';
+        }
 
         return redirect()->route('admin.verifikasi.index')
             ->with('success', $pesan);

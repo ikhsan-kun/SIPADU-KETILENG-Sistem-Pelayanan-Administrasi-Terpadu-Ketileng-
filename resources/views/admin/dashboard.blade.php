@@ -110,7 +110,7 @@
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
     {{-- Verifikasi Berkas (Pending) --}}
     <div class="card glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
         <div style="padding: 20px; border-bottom: 1px solid rgba(241, 245, 249, 0.8); display: flex; align-items: center; justify-content: space-between; background: rgba(250, 250, 250, 0.5);">
@@ -127,7 +127,7 @@
                     <p style="font-size: 14px; font-weight: 500; margin: 0;">Belum ada berkas yang perlu diverifikasi.</p>
                 </div>
             @else
-                <table style="width: 100%; text-align: left; font-size: 13px; min-width: 500px; border-collapse: collapse;">
+                <table style="width: 100%; text-align: left; font-size: 13px; min-width: 300px; border-collapse: collapse;">
                     <tbody>
                         @foreach($verifikasi_pending as $p)
                         <tr style="border-bottom: 1px solid #f8fafc; transition: background-color 0.2s;">
@@ -162,6 +162,57 @@
         </div>
     </div>
 
+    {{-- Notifikasi Registrasi Warga Baru --}}
+    <div class="card glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+        <div style="padding: 20px; border-bottom: 1px solid rgba(241, 245, 249, 0.8); display: flex; align-items: center; justify-content: space-between; background: rgba(250, 250, 250, 0.5);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg style="width: 16px; height: 16px; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                <h2 style="font-size: 15px; font-weight: 700; color: #1e293b; margin: 0;">Notifikasi Registrasi Warga</h2>
+            </div>
+            <span style="padding: 2px 8px; background-color: #dbeafe; color: #1e40af; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase;">Akun Baru</span>
+        </div>
+        <div style="flex: 1; overflow-x: auto;">
+            @if($registrasi_baru->isEmpty())
+                <div style="padding: 48px; text-align: center; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px;">
+                    <svg style="width: 40px; height: 40px; text-color: #cbd5e1; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <p style="font-size: 14px; font-weight: 500; margin: 0;">Belum ada registrasi akun warga.</p>
+                </div>
+            @else
+                <table style="width: 100%; text-align: left; font-size: 13px; min-width: 250px; border-collapse: collapse;">
+                    <thead style="background-color: #fafafa; border-bottom: 1px solid #f1f5f9;">
+                        <tr>
+                            <th style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Warga / NIK</th>
+                            <th style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Waktu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($registrasi_baru as $u)
+                        <tr style="border-bottom: 1px solid #f8fafc; transition: background-color 0.2s;">
+                            <td style="padding: 12px 16px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #eff6ff; color: #3b82f6; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; border: 1px solid #bfdbfe; flex-shrink: 0;">
+                                        {{ strtoupper(substr($u->name, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 700; color: #1e293b;">{{ $u->name }}</div>
+                                        <div style="font-size: 10px; color: #94a3b8; font-family: monospace;">NIK: {{ $u->nik }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding: 12px 16px; color: #64748b; font-size: 11px; vertical-align: middle;">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <span style="display: inline-block; width: 6px; height: 6px; background-color: #10b981; border-radius: 50%;"></span>
+                                    <span>{{ $u->created_at->diffForHumans() }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+        </div>
+    </div>
+
     {{-- Penduduk Terbaru --}}
     <div class="card glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
         <div style="padding: 20px; border-bottom: 1px solid rgba(241, 245, 249, 0.8); display: flex; align-items: center; justify-content: space-between; background: rgba(250, 250, 250, 0.5);">
@@ -178,12 +229,11 @@
                     <p style="font-size: 14px; font-weight: 500; margin: 0;">Belum ada data penduduk.</p>
                 </div>
             @else
-                <table style="width: 100%; text-align: left; font-size: 13px; min-width: 500px; border-collapse: collapse;">
+                <table style="width: 100%; text-align: left; font-size: 13px; min-width: 250px; border-collapse: collapse;">
                     <thead style="background-color: #fafafa; border-bottom: 1px solid #f1f5f9;">
                         <tr>
                             <th style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Nama</th>
-                            <th style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">NIK</th>
-                            <th style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Alamat / RT / RW</th>
+                            <th style="padding: 12px 16px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Alamat</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -194,12 +244,14 @@
                                     <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #f1f5f9; color: #475569; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">
                                         {{ strtoupper(substr($p->nama, 0, 1)) }}
                                     </div>
-                                    <span style="font-weight: 700; color: #1e293b;">{{ $p->nama }}</span>
+                                    <div>
+                                        <div style="font-weight: 700; color: #1e293b;">{{ $p->nama }}</div>
+                                        <div style="font-size: 10px; color: #94a3b8; font-family: monospace;">NIK: {{ $p->nik }}</div>
+                                    </div>
                                 </div>
                             </td>
-                            <td style="padding: 12px 16px; color: #475569; font-family: monospace; font-size: 12px; font-weight: 600;">{{ $p->nik }}</td>
                             <td style="padding: 12px 16px; color: #64748b; font-size: 11px; line-height: 1.4;">
-                                <div>{{ $p->desa }}, Kec. {{ $p->kecamatan }}</div>
+                                <div>{{ $p->desa }}</div>
                                 <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">RT {{ $p->rt ?? '-' }}/RW {{ $p->rw ?? '-' }}</div>
                             </td>
                         </tr>

@@ -160,43 +160,49 @@
                     </div>
                 </div>
             </div>
+            {{-- Flex container untuk sisi kanan header --}}
+            <div class="flex items-center gap-4">
+                {{-- Lonceng Notifikasi Real-time (Livewire) --}}
+                <livewire:notification-bell />
 
-            {{-- Profile Dropdown --}}
-            <div class="relative" style="position: relative; display: flex; align-items: center; gap: 12px;">
-                <div style="text-align: right; line-height: 1.3;" class="hidden sm:block">
-                    <p style="font-size: 12px; font-weight: 700; color: #334155; margin: 0;">{{ explode(' ', auth()->user()->name)[0] }}</p>
-                    <p style="font-size: 9px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Kepala Desa</p>
-                </div>
-                <button id="profile-dropdown-btn"
-                    class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors focus:outline-none">
-                    {{ strtoupper(substr(auth()->user()->name ?? 'K', 0, 1)) }}
-                </button>
-
-                {{-- Dropdown Card --}}
-                <div id="profile-dropdown-menu"
-                     class="hidden absolute mt-2 w-52 bg-white border border-slate-100 rounded-xl shadow-lg py-2 z-50 animate-fade-in-down"
-                     style="right: 0; z-index: 110; position: absolute; top: 100%;">
-                    <div class="px-4 py-2.5 border-b border-slate-50">
-                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Nama Akun</p>
-                        <p class="text-sm font-bold text-slate-800 truncate mt-0.5">{{ auth()->user()->name }}</p>
-                        <p class="text-[11px] text-blue-600 font-semibold mt-0.5">Kepala Desa</p>
+                {{-- Profile Dropdown --}}
+                <div class="relative" style="position: relative; display: flex; align-items: center; gap: 12px;">
+                    <div style="text-align: right; line-height: 1.3;" class="hidden sm:block">
+                        <p style="font-size: 12px; font-weight: 700; color: #334155; margin: 0;">{{ explode(' ', auth()->user()->name)[0] }}</p>
+                        <p style="font-size: 9px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Kepala Desa</p>
                     </div>
-                    <a href="{{ route('kades.profile') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        Lihat Profil
-                    </a>
-                    <hr class="border-slate-50 my-1">
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <button type="submit" class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    <button type="button"
+                        onclick="event.stopPropagation(); const m = document.getElementById('profile-dropdown-menu'); m.style.display = (m.style.display === 'block' ? 'none' : 'block');"
+                        class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors focus:outline-none cursor-pointer">
+                        {{ strtoupper(substr(auth()->user()->name ?? 'K', 0, 1)) }}
+                    </button>
+
+                    {{-- Dropdown Card --}}
+                    <div id="profile-dropdown-menu"
+                         style="display: none; position: absolute; right: 0; top: 100%; margin-top: 8px; width: 210px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 8px 0; z-index: 300;"
+                         onclick="event.stopPropagation();">
+                        <div class="px-4 py-2.5 border-b border-slate-50">
+                            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Nama Akun</p>
+                            <p class="text-sm font-bold text-slate-800 truncate mt-0.5">{{ auth()->user()->name }}</p>
+                            <p class="text-[11px] text-blue-600 font-semibold mt-0.5">Kepala Desa</p>
+                        </div>
+                        <a href="{{ route('kades.profile') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
-                            Keluar
-                        </button>
-                    </form>
+                            Lihat Profil
+                        </a>
+                        <hr class="border-slate-50 my-1">
+                        <form method="POST" action="{{ route('logout') }}" class="w-full">
+                            @csrf
+                            <button type="submit" class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                                Keluar
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </header>
@@ -223,7 +229,7 @@
         </div>
         @endif
 
-        <div class="p-4 md:p-8">
+        <div id="page-content" class="p-4 md:p-8">
             @yield('content')
         </div>
 
@@ -265,20 +271,49 @@
         }
 
         // ── PROFILE DROPDOWN MENU ──
-        const profileBtn = document.getElementById('profile-dropdown-btn');
-        const profileMenu = document.getElementById('profile-dropdown-menu');
-        if (profileBtn && profileMenu) {
-            profileBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileMenu.classList.toggle('hidden');
+        document.addEventListener('click', function() {
+            const profileMenu = document.getElementById('profile-dropdown-menu');
+            if (profileMenu) {
+                profileMenu.style.display = 'none';
+            }
+        });
+
+        // ── AUTO-DISMISS ALERT NOTIFICATIONS ──
+        const autoDismissAlerts = () => {
+            const alerts = document.querySelectorAll('.alert-success, .alert-error, [class*="alert-"]');
+            alerts.forEach(alert => {
+                if (alert.dataset.autoDismissed) return;
+                alert.dataset.autoDismissed = "true";
+
+                alert.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-8px)';
+                    alert.style.maxHeight = '0px';
+                    alert.style.marginTop = '0px';
+                    alert.style.marginBottom = '0px';
+                    alert.style.paddingTop = '0px';
+                    alert.style.paddingBottom = '0px';
+                    alert.style.overflow = 'hidden';
+
+                    setTimeout(() => {
+                        const parent = alert.parentElement;
+                        alert.remove();
+                        if (parent && parent.children.length === 0 && parent.classList.contains('mx-4')) {
+                            parent.remove();
+                        }
+                    }, 500);
+                }, 3500);
             });
-            document.addEventListener('click', function(e) {
-                if (!profileMenu.contains(e.target) && e.target !== profileBtn) {
-                    profileMenu.classList.add('hidden');
-                }
-            });
-        }
+        };
+
+        autoDismissAlerts();
+
+        const alertObserver = new MutationObserver(() => autoDismissAlerts());
+        alertObserver.observe(document.body, { childList: true, subtree: true });
     });
 </script>
+@include('partials.fcm-script')
 </body>
 </html>

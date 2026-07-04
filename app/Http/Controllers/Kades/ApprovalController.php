@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Kades;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\PengajuanSurat;
 use App\Services\SuratService;
 use Illuminate\Http\Request;
@@ -40,8 +41,21 @@ class ApprovalController extends Controller
             'approved_at' => now(),
         ]);
 
+        // Hapus notifikasi masuk untuk Kades terkait surat ini agar langsung hilang dari lonceng
+        Notification::where('url', route('kades.review', $pengajuan))->delete();
+
         // Generate QR Code + PDF
         $this->suratService->generateSurat($pengajuan);
+
+        // Notifikasi ke Warga: surat sudah selesai & bisa diunduh
+        Notification::kirim(
+            userId: $pengajuan->user_id,
+            title: 'Surat Anda Telah Disetujui! 🎉',
+            message: $pengajuan->jenisSurat->nama . ' No. ' . $noSurat . ' telah ditandatangani Kepala Desa dan siap untuk diunduh.',
+            icon: 'check',
+            color: 'green',
+            url: route('warga.detail', $pengajuan)
+        );
 
         return redirect()->route('kades.dashboard')
             ->with('success', "Surat #{$noSurat} berhasil disetujui dan QR Code telah disematkan.");
@@ -61,6 +75,18 @@ class ApprovalController extends Controller
             'approved_by'   => Auth::id(),
             'approved_at'   => now(),
         ]);
+
+        // Hapus notifikasi masuk untuk Kades terkait surat ini agar langsung hilang dari lonceng
+        Notification::where('url', route('kades.review', $pengajuan))->delete();
+
+        // Notifikasi ke Warga: surat ditolak Kades
+        Notification::kirim(
+            userId: $pengajuan->user_id,
+            title: 'Pengajuan Surat Ditolak Kades',
+            message: $pengajuan->jenisSurat->nama . ' Anda ditolak oleh Kepala Desa. Alasan: ' . $request->catatan_kades,
+            icon: 'x',
+            color: 'red'
+        );
 
         return redirect()->route('kades.dashboard')
             ->with('success', 'Surat berhasil ditolak.');
