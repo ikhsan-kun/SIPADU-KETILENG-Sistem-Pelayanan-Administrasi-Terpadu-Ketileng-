@@ -24,7 +24,7 @@ class FcmService
         }
 
         try {
-            $response = Http::withHeaders([
+            $response = Http::timeout(5)->withHeaders([
                 'Authorization' => 'key=' . $serverKey,
                 'Content-Type'  => 'application/json',
             ])->post('https://fcm.googleapis.com/fcm/send', [
