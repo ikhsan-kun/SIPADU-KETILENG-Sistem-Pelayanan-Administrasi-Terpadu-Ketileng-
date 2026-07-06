@@ -29,7 +29,7 @@
     <div class="card glass-card" style="display: flex; align-items: center; justify-content: space-between; padding: 20px;">
         <div>
             <p style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px 0;">Menunggu Persetujuan</p>
-            <p style="font-size: 30px; font-weight: 800; color: #1e293b; margin: 0;">{{ $stats['menunggu'] }}</p>
+            <p id="stat-menunggu" style="font-size: 30px; font-weight: 800; color: #1e293b; margin: 0;">{{ $stats['menunggu'] }}</p>
         </div>
         <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);">
             <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -39,7 +39,7 @@
     <div class="card glass-card" style="display: flex; align-items: center; justify-content: space-between; padding: 20px;">
         <div>
             <p style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px 0;">Disetujui Hari Ini</p>
-            <p style="font-size: 30px; font-weight: 800; color: #2563eb; margin: 0;">{{ $stats['disetujui'] }}</p>
+            <p id="stat-disetujui" style="font-size: 30px; font-weight: 800; color: #2563eb; margin: 0;">{{ $stats['disetujui'] }}</p>
         </div>
         <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #2563eb, #3b82f6); color: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);">
             <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -49,7 +49,7 @@
     <div class="card glass-card" style="display: flex; align-items: center; justify-content: space-between; padding: 20px;">
         <div>
             <p style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px 0;">Total Dokumen (Bulan Ini)</p>
-            <p style="font-size: 30px; font-weight: 800; color: #1e293b; margin: 0;">{{ $stats['total_bulan'] }}</p>
+            <p id="stat-total-bulan" style="font-size: 30px; font-weight: 800; color: #1e293b; margin: 0;">{{ $stats['total_bulan'] }}</p>
         </div>
         <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #64748b, #475569); color: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);">
             <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
@@ -74,7 +74,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    function renderKadesCharts() {
+        if (typeof ApexCharts === 'undefined') {
+            setTimeout(renderKadesCharts, 300);
+            return;
+        }
+
         // 1. Monthly Chart Options
         var monthlyOptions = {
             chart: {
@@ -124,12 +129,8 @@
                         fontWeight: 600
                     }
                 },
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                }
+                axisBorder: { show: false },
+                axisTicks: { show: false }
             },
             yaxis: {
                 labels: {
@@ -144,19 +145,19 @@
                 borderColor: '#f1f5f9',
                 strokeDashArray: 4
             },
-            theme: {
-                mode: 'light'
-            },
+            theme: { mode: 'light' },
             tooltip: {
                 theme: 'light',
-                x: {
-                    show: true
-                }
+                x: { show: true }
             }
         };
 
-        var monthlyChart = new ApexCharts(document.querySelector("#monthly-chart"), monthlyOptions);
-        monthlyChart.render();
+        var monthlyChartContainer = document.querySelector("#monthly-chart");
+        if (monthlyChartContainer) {
+            monthlyChartContainer.innerHTML = '';
+            window.monthlyChartInstance = new ApexCharts(monthlyChartContainer, monthlyOptions);
+            window.monthlyChartInstance.render();
+        }
 
         // 2. Popular Chart Options
         var popularOptions = {
@@ -172,22 +173,13 @@
                 position: 'bottom',
                 fontSize: '11px',
                 fontWeight: 600,
-                labels: {
-                    colors: '#475569'
-                },
-                markers: {
-                    radius: 12
-                }
+                labels: { colors: '#475569' },
+                markers: { radius: 12 }
             },
             dataLabels: {
                 enabled: true,
-                style: {
-                    fontSize: '11px',
-                    fontWeight: 700
-                },
-                dropShadow: {
-                    enabled: false
-                }
+                style: { fontSize: '11px', fontWeight: 700 },
+                dropShadow: { enabled: false }
             },
             plotOptions: {
                 pie: {
@@ -195,18 +187,8 @@
                         size: '70%',
                         labels: {
                             show: true,
-                            name: {
-                                show: true,
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                color: '#64748b'
-                            },
-                            value: {
-                                show: true,
-                                fontSize: '18px',
-                                fontWeight: 800,
-                                color: '#1e293b'
-                            },
+                            name: { show: true, fontSize: '12px', fontWeight: 700, color: '#64748b' },
+                            value: { show: true, fontSize: '18px', fontWeight: 800, color: '#1e293b' },
                             total: {
                                 show: true,
                                 label: 'Total',
@@ -219,18 +201,92 @@
                     }
                 }
             },
-            tooltip: {
-                theme: 'light'
-            }
+            tooltip: { theme: 'light' }
         };
 
-        var popularChart = new ApexCharts(document.querySelector("#popular-chart"), popularOptions);
-        popularChart.render();
+        var popularChartContainer = document.querySelector("#popular-chart");
+        if (popularChartContainer) {
+            popularChartContainer.innerHTML = '';
+            window.popularChartInstance = new ApexCharts(popularChartContainer, popularOptions);
+            window.popularChartInstance.render();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderKadesCharts);
+    window.addEventListener("load", renderKadesCharts);
+
+    // Otomatis perbarui grafik secara smooth tanpa full reload browser
+    window.addEventListener('new-notification-received', function () {
+        console.log('Notifikasi baru masuk, memperbarui data secara smooth...');
+
+        // 1. Ambil data JSON untuk memperbarui grafik & angka statistik
+        fetch(window.location.href, {
+            headers: { 
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update stats cards dengan transisi angka yang rapi
+            if (data.stats) {
+                const updateStat = (id, newVal) => {
+                    const el = document.getElementById(id);
+                    if (el && el.textContent !== String(newVal)) {
+                        el.style.transition = 'all 0.3s ease';
+                        el.style.opacity = '0';
+                        setTimeout(() => {
+                            el.textContent = newVal;
+                            el.style.opacity = '1';
+                        }, 300);
+                    }
+                };
+                updateStat('stat-menunggu', data.stats.menunggu);
+                updateStat('stat-disetujui', data.stats.disetujui);
+                updateStat('stat-total-bulan', data.stats.total_bulan);
+            }
+
+            // Update chart bulanan
+            if (window.monthlyChartInstance && data.monthlyChartData) {
+                window.monthlyChartInstance.updateSeries([{
+                    name: 'Pengajuan',
+                    data: data.monthlyChartData
+                }]);
+            }
+
+            // Update chart terpopuler
+            if (window.popularChartInstance && data.popularChartSeries && data.popularChartLabels) {
+                window.popularChartInstance.updateSeries(data.popularChartSeries);
+                window.popularChartInstance.updateOptions({
+                    labels: data.popularChartLabels
+                });
+            }
+        })
+        .catch(err => console.error('Gagal mengambil data statistik via AJAX:', err));
+
+        // 2. Ambil HTML baru untuk memperbarui daftar tabel antrean tanpa reload
+        fetch(window.location.href)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newAntrean = doc.getElementById('antrean-container');
+            const oldAntrean = document.getElementById('antrean-container');
+            if (newAntrean && oldAntrean) {
+                oldAntrean.style.transition = 'all 0.3s ease';
+                oldAntrean.style.opacity = '0.5';
+                setTimeout(() => {
+                    oldAntrean.innerHTML = newAntrean.innerHTML;
+                    oldAntrean.style.opacity = '1';
+                }, 300);
+            }
+        })
+        .catch(err => console.error('Gagal memperbarui tabel antrean:', err));
     });
 </script>
 
 {{-- Antrean Dokumen --}}
-<div class="card glass-card" style="padding: 0; overflow: hidden; margin-bottom: 32px;">
+<div id="antrean-container" class="card glass-card" style="padding: 0; overflow: hidden; margin-bottom: 32px;">
     <div style="padding: 20px; border-bottom: 1px solid rgba(241, 245, 249, 0.8); display: flex; align-items: center; justify-content: space-between; background: rgba(250, 250, 250, 0.5);">
         <div style="display: flex; align-items: center; gap: 8px;">
             <span style="width: 10px; height: 10px; border-radius: 50%; background-color: #f59e0b; display: inline-block;"></span>

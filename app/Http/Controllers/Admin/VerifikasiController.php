@@ -92,8 +92,15 @@ class VerifikasiController extends Controller
             'verified_at'   => now(),
         ]);
 
-        // Hapus notifikasi masuk untuk Admin terkait surat ini agar langsung hilang dari lonceng
-        Notification::where('url', route('admin.verifikasi.show', $pengajuan))->delete();
+        // Hapus semua notifikasi Admin terkait pengajuan ini agar langsung hilang dari lonceng
+        Notification::where(function($query) use ($pengajuan) {
+            $query->where('url', 'like', "%/admin/verifikasi/{$pengajuan->id}%")
+                  ->orWhere('url', 'like', "%/admin/verifikasi/{$pengajuan->id}")
+                  ->orWhere(function($q) use ($pengajuan) {
+                      $q->where('title', 'like', '%Pengajuan Surat Baru%')
+                        ->where('message', 'like', '%' . $pengajuan->penduduk->nama . '%');
+                  });
+        })->delete();
 
         $pengajuan->load('penduduk', 'jenisSurat');
 

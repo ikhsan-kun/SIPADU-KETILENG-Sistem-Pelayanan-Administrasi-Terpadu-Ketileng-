@@ -41,8 +41,14 @@ class ApprovalController extends Controller
             'approved_at' => now(),
         ]);
 
-        // Hapus notifikasi masuk untuk Kades terkait surat ini agar langsung hilang dari lonceng
-        Notification::where('url', route('kades.review', $pengajuan))->delete();
+        // Hapus semua notifikasi Kades terkait pengajuan ini agar langsung hilang dari lonceng
+        Notification::where(function($query) use ($pengajuan) {
+            $query->where('url', 'like', "%/kades/review/{$pengajuan->id}")
+                  ->orWhere(function($q) use ($pengajuan) {
+                      $q->where('title', 'like', '%Surat Siap Ditandatangani%')
+                        ->where('message', 'like', '%' . $pengajuan->penduduk->nama . '%');
+                  });
+        })->delete();
 
         // Generate QR Code + PDF
         $this->suratService->generateSurat($pengajuan);
@@ -76,8 +82,14 @@ class ApprovalController extends Controller
             'approved_at'   => now(),
         ]);
 
-        // Hapus notifikasi masuk untuk Kades terkait surat ini agar langsung hilang dari lonceng
-        Notification::where('url', route('kades.review', $pengajuan))->delete();
+        // Hapus semua notifikasi Kades terkait pengajuan ini agar langsung hilang dari lonceng
+        Notification::where(function($query) use ($pengajuan) {
+            $query->where('url', 'like', "%/kades/review/{$pengajuan->id}")
+                  ->orWhere(function($q) use ($pengajuan) {
+                      $q->where('title', 'like', '%Surat Siap Ditandatangani%')
+                        ->where('message', 'like', '%' . $pengajuan->penduduk->nama . '%');
+                  });
+        })->delete();
 
         // Notifikasi ke Warga: surat ditolak Kades
         Notification::kirim(

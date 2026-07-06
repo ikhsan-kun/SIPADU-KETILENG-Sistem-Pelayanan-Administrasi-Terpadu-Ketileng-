@@ -133,7 +133,7 @@
             @if(count($notifications) > 0)
             <div style="padding: 10px 16px; background: rgba(248,250,252,0.8); border-top: 1px solid #f1f5f9; text-align: center;">
                 <p style="font-size: 10px; color: #94a3b8; margin: 0; font-weight: 500;">
-                    🔄 Auto-refresh setiap 15 detik
+
                 </p>
             </div>
             @endif
@@ -148,7 +148,10 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+        if (window.hasNotificationBellListener) return;
+        window.hasNotificationBellListener = true;
+
         // Fungsi pembunyian suara notifikasi lembut (Web Audio API - Tanpa library)
         function playNotificationSound() {
             try {
@@ -212,5 +215,5 @@
                 .catch(err => console.log('Silent update error:', err));
             }
         });
-    });
+    })();
 </script>

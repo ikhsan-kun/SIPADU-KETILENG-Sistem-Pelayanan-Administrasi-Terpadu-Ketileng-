@@ -201,11 +201,20 @@
                 @error('file_kk')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
+            {{-- ── Pesan Error Duplikasi Pengajuan ── --}}
+            @if (session('error'))
+                <div class="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-xl mb-2">
+                    <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
             <div class="flex gap-3 pt-2">
-                <a href="{{ route('warga.pilih_surat') }}" class="btn-outline">Batal</a>
-                <button type="submit" class="btn-primary flex-1 justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                    Kirim Pengajuan
+                <a href="{{ route('warga.pilih_surat') }}" class="btn-outline" id="btn-batal">Batal</a>
+                <button type="submit" id="btn-submit" class="btn-primary flex-1 justify-center">
+                    <svg id="submit-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    <svg id="loading-icon" class="w-4 h-4 hidden animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                    <span id="submit-text">Kirim Pengajuan</span>
                 </button>
             </div>
         </form>
@@ -268,10 +277,24 @@ function previewFile(input, labelId, imgId, containerId, errorId, dropzoneId) {
 }
 
 // ✅ Validasi tambahan saat submit — cegah pengiriman jika masih ada error
+// ✅ Anti double-submit: disable tombol & tampilkan loading state saat form dikirim
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form[action*="ajukan"]');
+    const form       = document.querySelector('form[action*="ajukan"]');
+    const btnSubmit  = document.getElementById('btn-submit');
+    const submitIcon = document.getElementById('submit-icon');
+    const loadingIcon= document.getElementById('loading-icon');
+    const submitText = document.getElementById('submit-text');
+    let   isSubmitting = false;
+
     if (form) {
         form.addEventListener('submit', function (e) {
+            // ── 1. Cegah double submit ──
+            if (isSubmitting) {
+                e.preventDefault();
+                return;
+            }
+
+            // ── 2. Validasi ukuran file ──
             const ktpInput = document.getElementById('file_ktp');
             const kkInput  = document.getElementById('file_kk');
             let hasError   = false;
@@ -286,7 +309,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (hasError) {
-                e.preventDefault(); // Blokir pengiriman form
+                e.preventDefault();
+                return;
+            }
+
+            // ── 3. Tandai sedang submit & ubah tampilan tombol ──
+            isSubmitting = true;
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.classList.add('opacity-70', 'cursor-not-allowed');
+                if (submitIcon)  submitIcon.classList.add('hidden');
+                if (loadingIcon) loadingIcon.classList.remove('hidden');
+                if (submitText)  submitText.textContent = 'Mengirim...';
             }
         });
     }
