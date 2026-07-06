@@ -131,7 +131,7 @@
                     <tbody>
                         @foreach($verifikasi_pending as $p)
                         <tr style="border-bottom: 1px solid #f8fafc; transition: background-color 0.2s;">
-                            <td style="padding: 16px;">
+                            <td style="padding: 16px 16px 16px 20px;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <div style="width: 36px; height: 36px; border-radius: 50%; background-color: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; border: 1px solid #dbeafe; flex-shrink: 0;">
                                         {{ strtoupper(substr($p->penduduk->nama, 0, 1)) }}
@@ -148,7 +148,7 @@
                                     <span>{{ $p->created_at->diffForHumans() }}</span>
                                 </div>
                             </td>
-                            <td style="padding: 16px; text-align: right;">
+                            <td style="padding: 16px 24px 16px 16px; text-align: right;">
                                 <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px;">
                                     <span style="display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; background-color: #fef3c7; color: #d97706; border: 1px solid rgba(217, 119, 6, 0.15);">{{ $p->status_badge['label'] }}</span>
                                     <a href="{{ route('admin.verifikasi.show', $p) }}" class="btn-outline" style="padding: 6px 12px; font-size: 11px; border-radius: 8px; font-weight: 600; display: inline-flex; text-decoration: none;">Review</a>

@@ -130,6 +130,11 @@ Route::middleware('auth')->post('/save-fcm-token', function (\Illuminate\Http\Re
                 $table->text('fcm_token')->nullable()->after('remember_token');
             });
         }
+        // Hapus token ini dari user lain agar tidak terjadi duplikasi pengiriman ke browser yang sama saat testing
+        \App\Models\User::where('fcm_token', $request->token)
+            ->where('id', '!=', auth()->id())
+            ->update(['fcm_token' => null]);
+
         auth()->user()->update(['fcm_token' => $request->token]);
         return response()->json(['success' => true, 'message' => 'FCM Token saved successfully.']);
     } catch (\Exception $e) {
@@ -138,25 +143,24 @@ Route::middleware('auth')->post('/save-fcm-token', function (\Illuminate\Http\Re
     }
 })->name('save-fcm-token');
 
-Route::middleware('auth')->get('/test-notif', function () {
-    $user = auth()->user();
-    
-    $targetUrl = match($user->role) {
-        'admin' => route('admin.verifikasi.index'),
-        'kades' => route('kades.dashboard'),
-        default => route('warga.status'),
-    };
-
-    \App\Models\Notification::kirim(
-        $user->id,
-        'Uji Coba Notifikasi SIPADU',
-        'Notifikasi real-time & FCM berhasil dikirim pada pukul ' . date('H:i:s') . ' WIB.',
-        'check-circle',
-        'green',
-        $targetUrl
-    );
-    return response("<h3>✅ Notifikasi Uji Coba Berhasil Dikirim ke " . e($user->name) . "!</h3><p>Buka/kembali ke tab dashboard Anda untuk melihat badge lonceng, mendengarkan bunyi, dan mengklik item notifikasinya.</p><br><a href='" . e($targetUrl) . "'>← Kembali ke Dashboard</a>");
-})->name('test-notif');
+// ── ROUTE TESTING NOTIFIKASI (Nonaktifkan untuk Production) ───────────
+// Route::middleware('auth')->get('/test-notif', function () {
+//     $user = auth()->user();
+//     $targetUrl = match($user->role) {
+//         'admin' => route('admin.verifikasi.index'),
+//         'kades' => route('kades.dashboard'),
+//         default => route('warga.status'),
+//     };
+//     \App\Models\Notification::kirim(
+//         $user->id,
+//         'Uji Coba Notifikasi SIPADU',
+//         'Notifikasi real-time & FCM berhasil dikirim pada pukul ' . date('H:i:s') . ' WIB.',
+//         'check-circle',
+//         'green',
+//         $targetUrl
+//     );
+//     return response("<h3>✅ Notifikasi Uji Coba Berhasil Dikirim ke " . e($user->name) . "!</h3>");
+// })->name('test-notif');
 
 // ── WARGA ──────────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {

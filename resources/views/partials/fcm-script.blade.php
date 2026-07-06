@@ -53,10 +53,14 @@
                     });
                 }
 
-                // Tangkap notifikasi saat halaman sedang terbuka (Foreground)
+                // ── Tangkap notifikasi saat halaman sedang TERBUKA (Foreground) ──────────
+                // Jika tab aktif: HANYA update badge lonceng Livewire & bunyikan suara.
+                // Jangan tampilkan popup notifikasi sistem — itu tugas Service Worker saat background.
                 messaging.onMessage((payload) => {
-                    console.log('Notifikasi FCM Diterima:', payload);
+                    console.log('FCM Foreground diterima (tab aktif):', payload);
+                    // Cukup kirim sinyal ke Livewire bell agar badge diperbarui & berbunyi
                     window.dispatchEvent(new CustomEvent('new-notification-received'));
+                    // TIDAK memanggil showNotification() di sini — mencegah duplikasi dengan SW
                 });
             } catch (e) {
                 console.log('Firebase JS Init Error:', e);

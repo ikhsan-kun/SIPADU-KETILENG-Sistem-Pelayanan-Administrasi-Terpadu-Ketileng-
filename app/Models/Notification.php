@@ -30,6 +30,17 @@ class Notification extends Model
     // ── HELPER: kirim notifikasi ke user tertentu ──────────────────────────────
     public static function kirim(int $userId, string $title, string $message, string $icon = 'bell', string $color = 'blue', ?string $url = null): static
     {
+        // ── Guard duplikasi: jika notifikasi persis sama sudah ada dalam 60 detik terakhir, skip ──
+        $sudahAda = static::where('user_id', $userId)
+            ->where('title', $title)
+            ->where('url', $url)
+            ->where('created_at', '>=', now()->subSeconds(60))
+            ->exists();
+
+        if ($sudahAda) {
+            return static::where('user_id', $userId)->where('title', $title)->where('url', $url)->latest()->first();
+        }
+
         $notif = static::create([
             'user_id' => $userId,
             'title'   => $title,

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $stats = [
             'menunggu'    => PengajuanSurat::where('status', 'diproses')->count(),
@@ -51,6 +51,22 @@ class DashboardController extends Controller
 
         $popularChartLabels = $popularLetters->keys()->all();
         $popularChartSeries = $popularLetters->values()->all();
+
+        // Fallback jika belum ada data agar ApexCharts tidak blank
+        if (empty($popularChartSeries)) {
+            $popularChartLabels = ['Belum Ada Data'];
+            $popularChartSeries = [1];
+        }
+
+        // Jika request via AJAX, kirim data mentah agar grafik terupdate smooth tanpa reload
+        if ($request->ajax()) {
+            return response()->json([
+                'stats' => $stats,
+                'monthlyChartData' => $monthlyChartData,
+                'popularChartLabels' => $popularChartLabels,
+                'popularChartSeries' => $popularChartSeries,
+            ]);
+        }
 
         return view('kades.dashboard', compact(
             'stats', 

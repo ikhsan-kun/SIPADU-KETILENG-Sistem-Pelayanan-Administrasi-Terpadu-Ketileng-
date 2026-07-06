@@ -55,6 +55,18 @@ class PengajuanController extends Controller
         $user     = Auth::user();
         $penduduk = Penduduk::where('nik', $user->nik)->firstOrFail();
 
+        // ── Guard duplikasi: cegah warga mengajukan jenis surat yang sama jika masih aktif ──
+        $pengajuanAktif = PengajuanSurat::where('user_id', $user->id)
+            ->where('jenis_surat_id', $jenisSurat->id)
+            ->whereIn('status', ['menunggu', 'diproses'])
+            ->first();
+
+        if ($pengajuanAktif) {
+            return redirect()->back()
+                ->with('error', 'Anda sudah memiliki pengajuan ' . $jenisSurat->nama . ' yang sedang dalam proses (status: ' . ucfirst($pengajuanAktif->status) . '). Silakan tunggu hingga selesai sebelum mengajukan kembali.')
+                ->withInput();
+        }
+
         $pengajuan = PengajuanSurat::create([
             'user_id'        => $user->id,
             'penduduk_id'    => $penduduk->id,

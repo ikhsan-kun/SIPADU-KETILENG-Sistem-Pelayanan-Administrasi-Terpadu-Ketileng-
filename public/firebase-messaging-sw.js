@@ -12,61 +12,84 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-    const notificationTitle = payload.notification ? payload.notification.title : 'SIPADU Ketileng';
-    const notificationOptions = {
-        body: payload.notification ? payload.notification.body : 'Ada pemberitahuan baru.',
-        icon: payload.notification && payload.notification.icon ? payload.notification.icon : '/download.png',
-        data: {
-            url: payload.data && payload.data.url ? payload.data.url : '/'
-        }
-    };
+// ── Helper: cek apakah ada tab SIPADU yang sedang aktif (foreground) ──────────
+async function isAppFocused() {
+    const allClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    return allClients.some(client => client.focused === true || client.visibilityState === 'visible');
+}
 
-    return self.registration.showNotification(notificationTitle, notificationOptions);
+// ── Background Message Handler (tab tertutup / di background) ────────────────
+// Firebase SDK sudah otomatis TIDAK memanggil onBackgroundMessage jika tab aktif (foreground).
+// Ini mencegah duplikasi dengan onMessage() di fcm-script.blade.php.
+messaging.onBackgroundMessage(async function (payload) {
+    // Jika tab masih terbuka & aktif, biarkan onMessage() di halaman yang menangani
+    const focused = await isAppFocused();
+    if (focused) return;
+
+    const notificationTitle = payload.notification?.title ?? 'SIPADU Ketileng';
+    const notificationBody  = payload.notification?.body  ?? 'Ada pemberitahuan baru.';
+    const notificationIcon  = payload.notification?.icon  ?? '/download.png';
+    const targetUrl         = payload.data?.url           ?? '/';
+
+    return self.registration.showNotification(notificationTitle, {
+        body:    notificationBody,
+        icon:    notificationIcon,
+        badge:   '/download.png',
+        tag:     'sipadu-notif-' + targetUrl, // tag unik per URL — cegah notif duplikat di HP
+        renotify: false,                      // jika tag sama, tidak pergetar HP lagi
+        data:    { url: targetUrl }
+    });
 });
 
+// ── Push Event Handler (fallback jika onBackgroundMessage tidak terpicu) ──────
 self.addEventListener('push', function (event) {
-    if (event.data) {
-        let notificationTitle = 'SIPADU Ketileng';
-        let notificationOptions = {
-            body: 'Ada pemberitahuan baru.',
-            icon: '/download.png',
-            data: { url: '/' }
-        };
+    // Lewati jika tidak ada data
+    if (!event.data) return;
 
-        try {
-            const payload = event.data.json();
-            if (payload.notification) {
-                notificationTitle = payload.notification.title || notificationTitle;
-                notificationOptions.body = payload.notification.body || notificationOptions.body;
-                if (payload.notification.icon) {
-                    notificationOptions.icon = payload.notification.icon;
-                }
-            }
-            if (payload.data && payload.data.url) {
-                notificationOptions.data.url = payload.data.url;
-            }
-        } catch(jsonErr) {
-            // Jika data pengujian berbentuk Plain Text (bukan JSON)
-            try {
-                notificationOptions.body = event.data.text();
-            } catch(e) {}
-        }
+    let title = 'SIPADU Ketileng';
+    let body  = 'Ada pemberitahuan baru.';
+    let icon  = '/download.png';
+    let url   = '/';
 
-        event.waitUntil(
-            self.registration.showNotification(notificationTitle, notificationOptions)
-        );
+    try {
+        const payload = event.data.json();
+        title = payload.notification?.title ?? title;
+        body  = payload.notification?.body  ?? body;
+        icon  = payload.notification?.icon  ?? icon;
+        url   = payload.data?.url           ?? url;
+    } catch (e) {
+        // Plain text fallback
+        try { body = event.data.text(); } catch (_) {}
     }
+
+    event.waitUntil(
+        // Cek dulu apakah tab aktif — jika ya, jangan tampilkan notifikasi sistem
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (windowClients) {
+            const appFocused = windowClients.some(c => c.visibilityState === 'visible');
+            if (appFocused) return; // Tab aktif: biarkan onMessage() di halaman yang handle
+
+            return self.registration.showNotification(title, {
+                body:     body,
+                icon:     icon,
+                badge:    '/download.png',
+                tag:      'sipadu-notif-' + url, // tag unik per URL
+                renotify: false,
+                data:     { url: url }
+            });
+        })
+    );
 });
 
+// ── Klik notifikasi → buka/fokus tab yang sesuai ─────────────────────────────
 self.addEventListener('notificationclick', function (event) {
     event.notification.close();
-    const targetUrl = event.notification.data ? event.notification.data.url : '/';
+    const targetUrl = event.notification.data?.url ?? '/';
+
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (windowClients) {
             for (let i = 0; i < windowClients.length; i++) {
                 const client = windowClients[i];
-                if (client.url === targetUrl && 'focus' in client) {
+                if (client.url.includes(targetUrl) && 'focus' in client) {
                     return client.focus();
                 }
             }
