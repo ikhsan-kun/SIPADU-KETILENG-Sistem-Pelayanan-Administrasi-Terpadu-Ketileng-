@@ -4,12 +4,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const firebaseConfig = {
-            apiKey: "{{ env('FIREBASE_API_KEY', 'AIzaSyBCsySc3QWYbtxgoBj92bDlgAZo2LW3tW4') }}",
-            authDomain: "{{ env('FIREBASE_AUTH_DOMAIN', 'sipadu-ketileng.firebaseapp.com') }}",
-            projectId: "{{ env('FIREBASE_PROJECT_ID', 'sipadu-ketileng') }}",
-            storageBucket: "{{ env('FIREBASE_STORAGE_BUCKET', 'sipadu-ketileng.firebasestorage.app') }}",
-            messagingSenderId: "{{ env('FIREBASE_MESSAGING_SENDER_ID', '134729018039') }}",
-            appId: "{{ env('FIREBASE_APP_ID', '1:134729018039:web:82aa58fae70584b199bb32') }}"
+            apiKey: "{{ env('FIREBASE_API_KEY') }}",
+            authDomain: "{{ env('FIREBASE_AUTH_DOMAIN') }}",
+            projectId: "{{ env('FIREBASE_PROJECT_ID') }}",
+            storageBucket: "{{ env('FIREBASE_STORAGE_BUCKET') }}",
+            messagingSenderId: "{{ env('FIREBASE_MESSAGING_SENDER_ID') }}",
+            appId: "{{ env('FIREBASE_APP_ID') }}"
         };
 
         if (firebaseConfig.apiKey) {
@@ -22,11 +22,14 @@
                     Notification.requestPermission().then((permission) => {
                         if (permission === 'granted') {
                             if ('serviceWorker' in navigator) {
-                                navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                                // Kirimkan parameter konfigurasi ke Service Worker secara dinamis via query string
+                                // Hal ini untuk menghindari hardcoding API Key di file firebase-messaging-sw.js
+                                const swUrl = '/firebase-messaging-sw.js?' + new URLSearchParams(firebaseConfig).toString();
+                                navigator.serviceWorker.register(swUrl)
                                     .then((registration) => {
                                         return messaging.getToken({
                                             serviceWorkerRegistration: registration,
-                                            vapidKey: "{{ env('FIREBASE_VAPID_KEY', 'BDunN7aaIGFoH-OzEPfyzCng1ftVhJKInnTbV3BHeOpabVkLWdXVnjBx9-2pJz-y8ZCprGQr7ZfhkCB-U5_odvI') }}"
+                                            vapidKey: "{{ env('FIREBASE_VAPID_KEY') }}"
                                         });
                                     })
                                     .then((currentToken) => {
