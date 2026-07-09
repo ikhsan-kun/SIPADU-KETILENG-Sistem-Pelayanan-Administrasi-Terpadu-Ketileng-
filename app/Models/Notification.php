@@ -31,14 +31,26 @@ class Notification extends Model
     public static function kirim(int $userId, string $title, string $message, string $icon = 'bell', string $color = 'blue', ?string $url = null): static
     {
         // ── Guard duplikasi: jika notifikasi persis sama sudah ada dalam 60 detik terakhir, skip ──
-        $sudahAda = static::where('user_id', $userId)
+        $query = static::where('user_id', $userId)
             ->where('title', $title)
-            ->where('url', $url)
-            ->where('created_at', '>=', now()->subSeconds(60))
-            ->exists();
+            ->where('created_at', '>=', now()->subSeconds(60)->toDateTimeString());
+
+        if (is_null($url)) {
+            $query->whereNull('url');
+        } else {
+            $query->where('url', $url);
+        }
+
+        $sudahAda = $query->exists();
 
         if ($sudahAda) {
-            return static::where('user_id', $userId)->where('title', $title)->where('url', $url)->latest()->first();
+            $fallbackQuery = static::where('user_id', $userId)->where('title', $title);
+            if (is_null($url)) {
+                $fallbackQuery->whereNull('url');
+            } else {
+                $fallbackQuery->where('url', $url);
+            }
+            return $fallbackQuery->latest()->first();
         }
 
         $notif = static::create([

@@ -12,12 +12,12 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const firebaseConfig = {
-                apiKey: "{{ env('FIREBASE_API_KEY') }}",
-                authDomain: "{{ env('FIREBASE_AUTH_DOMAIN') }}",
-                projectId: "{{ env('FIREBASE_PROJECT_ID') }}",
-                storageBucket: "{{ env('FIREBASE_STORAGE_BUCKET') }}",
-                messagingSenderId: "{{ env('FIREBASE_MESSAGING_SENDER_ID') }}",
-                appId: "{{ env('FIREBASE_APP_ID') }}"
+                apiKey: "{{ config('services.firebase.api_key') }}",
+                authDomain: "{{ config('services.firebase.auth_domain') }}",
+                projectId: "{{ config('services.firebase.project_id') }}",
+                storageBucket: "{{ config('services.firebase.storage_bucket') }}",
+                messagingSenderId: "{{ config('services.firebase.messaging_sender_id') }}",
+                appId: "{{ config('services.firebase.app_id') }}"
             };
 
             if (!firebaseConfig.apiKey) {
@@ -43,39 +43,13 @@
 
                         if (!('serviceWorker' in navigator)) return;
 
-                        // ── KUNCI UTAMA: Gunakan URL SW yang STATIS tanpa query string ──
-                        // Parameter konfigurasi dikirim via postMessage SETELAH SW aktif,
-                        // bukan via query string. Ini memastikan browser hanya punya SATU
-                        // instance SW aktif, tidak membuat duplikasi saat URL berbeda.
-                        navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-                            updateViaCache: 'none' // Selalu ambil SW terbaru dari server
-                        })
+                        // Kirimkan parameter konfigurasi ke Service Worker secara dinamis via query string
+                        const swUrl = '/firebase-messaging-sw.js?' + new URLSearchParams(firebaseConfig).toString();
+                        navigator.serviceWorker.register(swUrl)
                         .then((registration) => {
-                            // Kirim konfigurasi ke SW via postMessage setelah aktif
-                            const sendConfig = () => {
-                                if (registration.active) {
-                                    registration.active.postMessage({
-                                        type: 'FIREBASE_CONFIG',
-                                        config: firebaseConfig
-                                    });
-                                }
-                            };
-
-                            if (registration.active) {
-                                sendConfig();
-                            } else {
-                                // SW baru saja dipasang, tunggu sampai aktif
-                                const sw = registration.installing || registration.waiting;
-                                if (sw) {
-                                    sw.addEventListener('statechange', () => {
-                                        if (sw.state === 'activated') sendConfig();
-                                    });
-                                }
-                            }
-
                             return messaging.getToken({
                                 serviceWorkerRegistration: registration,
-                                vapidKey: "{{ env('FIREBASE_VAPID_KEY') }}"
+                                vapidKey: "{{ config('services.firebase.vapid_key') }}"
                             });
                         })
                         .then((currentToken) => {
@@ -84,10 +58,11 @@
                                 return;
                             }
 
-                            // ── Guard: Jangan simpan token jika sudah sama dengan sebelumnya ──
-                            const savedToken = sessionStorage.getItem('fcm_token_saved');
+                            // ── Guard: Jangan simpan token jika sudah sama dengan sebelumnya untuk user ini ──
+                            const userId = "{{ auth()->id() }}";
+                            const savedToken = sessionStorage.getItem('fcm_token_saved_' + userId);
                             if (savedToken === currentToken) {
-                                console.log('[FCM] Token sama, tidak perlu disimpan ulang.');
+                                console.log('[FCM] Token sama untuk user ini, tidak perlu disimpan ulang.');
                                 return;
                             }
 
@@ -103,7 +78,7 @@
                             .then(res => res.json())
                             .then(res => {
                                 if (res.success) {
-                                    sessionStorage.setItem('fcm_token_saved', currentToken);
+                                    sessionStorage.setItem('fcm_token_saved_' + userId, currentToken);
                                     console.log('[FCM] Token berhasil disimpan.');
                                 }
                             })

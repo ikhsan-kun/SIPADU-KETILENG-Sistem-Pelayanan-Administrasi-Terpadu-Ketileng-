@@ -1,46 +1,36 @@
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
-// ── State konfigurasi dari postMessage ───────────────────────────────────────
-let firebaseConfig = null;
-let messaging = null;
+// ── Konfigurasi Firebase (dibaca dari query string saat registrasi) ───────────
+const params = new URLSearchParams(self.location.search);
+const firebaseConfig = {
+    apiKey:            params.get('apiKey')            || '',
+    authDomain:        params.get('authDomain')        || '',
+    projectId:         params.get('projectId')         || '',
+    storageBucket:     params.get('storageBucket')     || '',
+    messagingSenderId: params.get('messagingSenderId') || '',
+    appId:             params.get('appId')             || ''
+};
 
-// ── Terima konfigurasi Firebase dari halaman utama via postMessage ────────────
-// Ini menggantikan metode query string yang menyebabkan browser mendaftarkan
-// banyak Service Worker berbeda karena URL yang berubah-ubah setiap sesi.
-self.addEventListener('message', function (event) {
-    if (!event.data || event.data.type !== 'FIREBASE_CONFIG') return;
-    if (firebaseConfig) return; // Sudah diinisialisasi sebelumnya, skip
+if (firebaseConfig.apiKey) {
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
 
-    firebaseConfig = event.data.config;
+    // ── Background Message Handler ─────────────────────────────────────────────
+    // JANGAN panggil showNotification() secara manual di sini.
+    // Sejak payload backend sudah HANYA menggunakan webpush.notification
+    // (top-level 'notification' sudah dihapus dari FcmService.php),
+    // FCM SDK akan menampilkan notifikasi satu kali secara otomatis.
+    messaging.onBackgroundMessage(function(payload) {
+        console.log('[SW] Background message:', payload.notification?.title);
+        // Tidak memanggil showNotification() — FCM SDK yang handle otomatis
+    });
+}
 
-    if (!firebaseConfig.apiKey) return;
-
-    try {
-        // Inisialisasi Firebase di dalam SW hanya sekali setelah menerima konfigurasi
-        firebase.initializeApp(firebaseConfig);
-        messaging = firebase.messaging();
-
-        // ── Background Message Handler ────────────────────────────────────────
-        // PENTING: HANYA log saja di sini — JANGAN panggil showNotification() secara manual!
-        // FCM SDK secara otomatis menampilkan notifikasi dari payload 'notification' ke layar.
-        // Memanggil showNotification() di sini AKAN menyebabkan notifikasi ganda.
-        messaging.onBackgroundMessage(function (payload) {
-            console.log('[SW] Menerima pesan background:', payload.notification?.title);
-            // Tidak ada showNotification() di sini — biarkan FCM SDK yang handle
-        });
-
-        console.log('[SW] Firebase Messaging berhasil diinisialisasi via postMessage.');
-    } catch (e) {
-        console.log('[SW] Firebase init error:', e.message);
-    }
-});
-
-// ── Klik notifikasi → buka/fokus tab yang sesuai ─────────────────────────────
-self.addEventListener('notificationclick', function (event) {
+// ── Klik notifikasi → buka/fokus tab ─────────────────────────────────────────
+self.addEventListener('notificationclick', function(event) {
     event.notification.close();
 
-    // Temukan target URL dari data notifikasi (kompatibel FCM v1 dan Legacy)
     let targetUrl = '/';
     if (event.notification.data) {
         targetUrl = event.notification.data.url ||
@@ -49,9 +39,8 @@ self.addEventListener('notificationclick', function (event) {
     }
 
     event.waitUntil(
-        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (windowClients) {
-            for (let i = 0; i < windowClients.length; i++) {
-                const client = windowClients[i];
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(windowClients) {
+            for (const client of windowClients) {
                 if (client.url.includes(targetUrl) && 'focus' in client) {
                     return client.focus();
                 }

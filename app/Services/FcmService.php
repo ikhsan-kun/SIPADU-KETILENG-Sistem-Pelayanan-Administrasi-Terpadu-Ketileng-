@@ -25,16 +25,16 @@ class FcmService
             }
         }
 
-        // Cek credential dari .env untuk HTTP v1 API
-        if (env('FIREBASE_CLIENT_EMAIL') && env('FIREBASE_PRIVATE_KEY')) {
-            $projectId = env('FIREBASE_PROJECT_ID', 'sipadu-ketileng');
-            $privateKey = str_replace('\n', "\n", env('FIREBASE_PRIVATE_KEY'));
-            return static::sendPushV1($token, $title, $body, $url, $projectId, env('FIREBASE_CLIENT_EMAIL'), $privateKey);
+        // Cek credential dari config untuk HTTP v1 API
+        if (config('services.firebase.client_email') && config('services.firebase.private_key')) {
+            $projectId = config('services.firebase.project_id', 'sipadu-ketileng');
+            $privateKey = str_replace('\n', "\n", config('services.firebase.private_key'));
+            return static::sendPushV1($token, $title, $body, $url, $projectId, config('services.firebase.client_email'), $privateKey);
         }
 
         // 2. Fallback ke Legacy Server Key
-        $serverKey = env('FCM_SERVER_KEY');
-        if (!empty($serverKey) && $serverKey !== env('FIREBASE_VAPID_KEY')) {
+        $serverKey = config('services.firebase.server_key');
+        if (!empty($serverKey) && $serverKey !== config('services.firebase.vapid_key')) {
             return static::sendPushLegacy($token, $title, $body, $url, $serverKey);
         }
 
@@ -59,15 +59,17 @@ class FcmService
                 'Content-Type'  => 'application/json',
             ])->post($endpoint, [
                 'message' => [
-                    'token'        => $token,
-                    'notification' => [
-                        'title' => $title,
-                        'body'  => $body,
-                    ],
+                    'token' => $token,
+                    // PENTING: Hapus top-level 'notification' — gunakan HANYA webpush.notification
+                    // Memiliki keduanya menyebabkan browser menampilkan dua notifikasi sekaligus.
                     'webpush' => [
                         'notification' => [
+                            'title' => $title,
+                            'body'  => $body,
                             'icon'  => url('/download.png'),
-                            'sound' => 'default',
+                            'badge' => url('/download.png'),
+                            'tag'   => 'sipadu-' . md5($title . $body), // Tag unik cegah notif duplikat
+                            'requireInteraction' => false,
                         ],
                         'fcm_options' => [
                             'link' => $url ?? url('/'),
