@@ -1,94 +1,52 @@
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
-// ── Ambil konfigurasi Firebase dinamis dari query string registrasi ──────────
-const params = new URLSearchParams(self.location.search);
-const firebaseConfig = {
-    apiKey: params.get('apiKey') || "",
-    authDomain: params.get('authDomain') || "",
-    projectId: params.get('projectId') || "",
-    storageBucket: params.get('storageBucket') || "",
-    messagingSenderId: params.get('messagingSenderId') || "",
-    appId: params.get('appId') || ""
-};
+// ── State konfigurasi dari postMessage ───────────────────────────────────────
+let firebaseConfig = null;
+let messaging = null;
 
-let messaging;
+// ── Terima konfigurasi Firebase dari halaman utama via postMessage ────────────
+// Ini menggantikan metode query string yang menyebabkan browser mendaftarkan
+// banyak Service Worker berbeda karena URL yang berubah-ubah setiap sesi.
+self.addEventListener('message', function (event) {
+    if (!event.data || event.data.type !== 'FIREBASE_CONFIG') return;
+    if (firebaseConfig) return; // Sudah diinisialisasi sebelumnya, skip
 
-// Hanya inisialisasi jika apiKey ada (menghindari error jika diakses langsung tanpa parameter)
-if (firebaseConfig.apiKey) {
-    firebase.initializeApp(firebaseConfig);
-    messaging = firebase.messaging();
-}
+    firebaseConfig = event.data.config;
 
-// ── Helper: cek apakah ada tab SIPADU yang sedang aktif (foreground) ──────────
-async function isAppFocused() {
-    const allClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    return allClients.some(client => client.focused === true || client.visibilityState === 'visible');
-}
-
-// ── Background Message Handler (tab tertutup / di background) ────────────────
-if (messaging) {
-    messaging.onBackgroundMessage(async function (payload) {
-        // Jika tab masih terbuka & aktif, biarkan onMessage() di halaman yang menangani
-        const focused = await isAppFocused();
-        if (focused) return;
-
-        const notificationTitle = payload.notification?.title ?? 'SIPADU Ketileng';
-        const notificationBody  = payload.notification?.body  ?? 'Ada pemberitahuan baru.';
-        const notificationIcon  = payload.notification?.icon  ?? '/download.png';
-        const targetUrl         = payload.data?.url           ?? '/';
-
-        return self.registration.showNotification(notificationTitle, {
-            body:    notificationBody,
-            icon:    notificationIcon,
-            badge:   '/download.png',
-            tag:     'sipadu-notif-' + targetUrl, // tag unik per URL
-            renotify: false,
-            data:    { url: targetUrl }
-        });
-    });
-}
-
-// ── Push Event Handler (fallback jika onBackgroundMessage tidak terpicu) ──────
-self.addEventListener('push', function (event) {
-    if (!event.data) return;
-
-    let title = 'SIPADU Ketileng';
-    let body  = 'Ada pemberitahuan baru.';
-    let icon  = '/download.png';
-    let url   = '/';
+    if (!firebaseConfig.apiKey) return;
 
     try {
-        const payload = event.data.json();
-        title = payload.notification?.title ?? title;
-        body  = payload.notification?.body  ?? body;
-        icon  = payload.notification?.icon  ?? icon;
-        url   = payload.data?.url           ?? url;
+        // Inisialisasi Firebase di dalam SW hanya sekali setelah menerima konfigurasi
+        firebase.initializeApp(firebaseConfig);
+        messaging = firebase.messaging();
+
+        // ── Background Message Handler ────────────────────────────────────────
+        // PENTING: HANYA log saja di sini — JANGAN panggil showNotification() secara manual!
+        // FCM SDK secara otomatis menampilkan notifikasi dari payload 'notification' ke layar.
+        // Memanggil showNotification() di sini AKAN menyebabkan notifikasi ganda.
+        messaging.onBackgroundMessage(function (payload) {
+            console.log('[SW] Menerima pesan background:', payload.notification?.title);
+            // Tidak ada showNotification() di sini — biarkan FCM SDK yang handle
+        });
+
+        console.log('[SW] Firebase Messaging berhasil diinisialisasi via postMessage.');
     } catch (e) {
-        try { body = event.data.text(); } catch (_) {}
+        console.log('[SW] Firebase init error:', e.message);
     }
-
-    event.waitUntil(
-        self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (windowClients) {
-            const appFocused = windowClients.some(c => c.visibilityState === 'visible');
-            if (appFocused) return;
-
-            return self.registration.showNotification(title, {
-                body:     body,
-                icon:     icon,
-                badge:    '/download.png',
-                tag:      'sipadu-notif-' + url,
-                renotify: false,
-                data:     { url: url }
-            });
-        })
-    );
 });
 
 // ── Klik notifikasi → buka/fokus tab yang sesuai ─────────────────────────────
 self.addEventListener('notificationclick', function (event) {
     event.notification.close();
-    const targetUrl = event.notification.data?.url ?? '/';
+
+    // Temukan target URL dari data notifikasi (kompatibel FCM v1 dan Legacy)
+    let targetUrl = '/';
+    if (event.notification.data) {
+        targetUrl = event.notification.data.url ||
+                    event.notification.data.FCM_MSG?.data?.url ||
+                    targetUrl;
+    }
 
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (windowClients) {
